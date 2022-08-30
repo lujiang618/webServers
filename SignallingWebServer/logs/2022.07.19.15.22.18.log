@@ -1,0 +1,42 @@
+15:22:18.250 Config: {
+	"UseFrontend": true,
+	"UseMatchmaker": true,
+	"UseHTTPS": false,
+	"UseAuthentication": false,
+	"LogToFile": true,
+	"LogVerbose": true,
+	"HomepageFile": "/Public/player.html",
+	"AdditionalRoutes": {},
+	"EnableWebserver": true,
+	"MatchmakerAddress": "192.168.99.145",
+	"MatchmakerPort": "2081",
+	"PublicIp": "localhost",
+	"HttpPort": 7001,
+	"HttpsPort": 443,
+	"StreamerPort": 7002,
+	"SFUPort": 8889,
+	"peerConnectionOptions": "{\"iceServers\":[{\"urls\":[\"stun:stun.l.google.com:19302\"]}]}",
+	"publicIp": [
+		"127.0.0.1",
+		"192.168.99.145"
+	],
+	"matchmakerAddress": "192.168.99.145",
+	"matchmakerPort": 2081
+}
+15:22:18.263 peerConnectionOptions = {"iceServers":[{"urls":["stun:stun.l.google.com:19302"]}]}
+15:22:18.273 Running Cirrus - The Pixel Streaming reference implementation signalling server for Unreal Engine 5.0.
+15:22:18.277 WebSocket listening for Streamer connections on :7002
+15:22:18.278 WebSocket listening for SFU connections on :8889
+15:22:18.278 WebSocket listening for Players connections on :7001
+15:22:18.279 Http listening on *: 7001
+15:22:18.280 Cirrus connected to Matchmaker 192.168.99.145:2081
+15:22:18.295 Streamer connected: ::ffff:127.0.0.1
+15:23:18.370 [37m-> Streamer[34m: {"type":"ping","time":1660893798}
+15:23:18.370 [37m<- Streamer[32m: {"type":"pong","time":1660893798}
+15:24:16.358 Matchmaker connection ended
+15:24:16.358 Setting Keep Alive to true
+15:24:16.359 Matchmaker connection closed (hadError=false)
+15:24:16.359 Try reconnect to Matchmaker in 5 seconds
+15:24:18.374 [37m-> Streamer[34m: {"type":"ping","time":1660893858}
+15:24:18.375 [37m<- Streamer[32m: {"type":"pong","time":1660893858}
+15:24:21.363 Cirrus connected to Matchmaker 192.168.99.145:2081

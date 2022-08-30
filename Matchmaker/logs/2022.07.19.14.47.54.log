@@ -1,0 +1,140 @@
+14:47:54.662 HTTP listening on *:2080
+14:47:54.662 Matchmaker listening on *:2081
+14:47:56.011 Message TYPE: connect
+14:47:56.011 Adding connection for localhost with playerConnected: false
+14:47:56.011 Message TYPE: connect
+14:47:56.011 Adding connection for localhost with playerConnected: true
+14:47:56.596 Message TYPE: ping
+14:48:09.358 Message TYPE: ping
+14:48:23.701 ERROR (SyntaxError: Unexpected token G in JSON at position 0): Failed to parse Cirrus information from data: GET / HTTP/1.1
+Host: localhost:2081
+Connection: keep-alive
+sec-ch-ua: "Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: Hm_lvt_840c33c5140908de50ebffc4294e7dbf=1633917752,1635140399,1635746442,1635903869; p_alias=%253Cfe%2560%2560eebipj; p_alias_p=O%25AC%25D1%25E1%25ADppp; p_alias_a=; bindId=7737d6e63e0a48b198c2dc01d43b51b6; watermark_content_current=ggg%202791
+
+
+14:48:23.701 Ending connection to remote address ::1
+14:48:23.702 ERROR (SyntaxError: Unexpected token G in JSON at position 0): Failed to parse Cirrus information from data: GET / HTTP/1.1
+Host: localhost:2081
+Connection: keep-alive
+sec-ch-ua: "Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: Hm_lvt_840c33c5140908de50ebffc4294e7dbf=1633917752,1635140399,1635746442,1635903869; p_alias=%253Cfe%2560%2560eebipj; p_alias_p=O%25AC%25D1%25E1%25ADppp; p_alias_a=; bindId=7737d6e63e0a48b198c2dc01d43b51b6; watermark_content_current=ggg%202791
+
+
+14:48:23.702 Ending connection to remote address ::1
+14:48:23.703 ERROR (SyntaxError: Unexpected token G in JSON at position 0): Failed to parse Cirrus information from data: GET / HTTP/1.1
+Host: localhost:2081
+Connection: keep-alive
+sec-ch-ua: "Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: Hm_lvt_840c33c5140908de50ebffc4294e7dbf=1633917752,1635140399,1635746442,1635903869; p_alias=%253Cfe%2560%2560eebipj; p_alias_p=O%25AC%25D1%25E1%25ADppp; p_alias_a=; bindId=7737d6e63e0a48b198c2dc01d43b51b6; watermark_content_current=ggg%202791
+
+
+14:48:23.703 Ending connection to remote address ::1
+14:48:24.718 ERROR (SyntaxError: Unexpected token G in JSON at position 0): Failed to parse Cirrus information from data: GET / HTTP/1.1
+Host: localhost:2081
+Connection: keep-alive
+Cache-Control: max-age=0
+sec-ch-ua: "Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: Hm_lvt_840c33c5140908de50ebffc4294e7dbf=1633917752,1635140399,1635746442,1635903869; p_alias=%253Cfe%2560%2560eebipj; p_alias_p=O%25AC%25D1%25E1%25ADppp; p_alias_a=; bindId=7737d6e63e0a48b198c2dc01d43b51b6; watermark_content_current=ggg%202791
+
+
+14:48:24.718 Ending connection to remote address ::1
+14:48:24.718 ERROR (SyntaxError: Unexpected token G in JSON at position 0): Failed to parse Cirrus information from data: GET / HTTP/1.1
+Host: localhost:2081
+Connection: keep-alive
+Cache-Control: max-age=0
+sec-ch-ua: "Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: Hm_lvt_840c33c5140908de50ebffc4294e7dbf=1633917752,1635140399,1635746442,1635903869; p_alias=%253Cfe%2560%2560eebipj; p_alias_p=O%25AC%25D1%25E1%25ADppp; p_alias_a=; bindId=7737d6e63e0a48b198c2dc01d43b51b6; watermark_content_current=ggg%202791
+
+
+14:48:24.718 Ending connection to remote address ::1
+14:48:24.719 ERROR (SyntaxError: Unexpected token G in JSON at position 0): Failed to parse Cirrus information from data: GET / HTTP/1.1
+Host: localhost:2081
+Connection: keep-alive
+Cache-Control: max-age=0
+sec-ch-ua: "Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: Hm_lvt_840c33c5140908de50ebffc4294e7dbf=1633917752,1635140399,1635746442,1635903869; p_alias=%253Cfe%2560%2560eebipj; p_alias_p=O%25AC%25D1%25E1%25ADppp; p_alias_a=; bindId=7737d6e63e0a48b198c2dc01d43b51b6; watermark_content_current=ggg%202791
+
+
+14:48:24.719 Ending connection to remote address ::1
+14:48:26.625 Message TYPE: ping
+14:48:28.376 WARNING: No empty Cirrus servers are available
+14:48:34.113 WARNING: No empty Cirrus servers are available
+14:48:39.388 Message TYPE: ping
+14:48:44.126 WARNING: No empty Cirrus servers are available
+14:48:50.981 Message TYPE: clientDisconnected
+14:48:50.981 Client disconnected from Cirrus server localhost:7001
+14:48:54.762 Redirect to localhost:7001
+14:48:56.653 Message TYPE: ping
+14:49:09.397 Message TYPE: ping
+14:49:26.683 Message TYPE: ping
+14:49:38.051 WARNING: No empty Cirrus servers are available
+14:49:39.425 Message TYPE: ping
+14:49:48.068 Redirect to localhost:7001
+14:49:56.713 Message TYPE: ping

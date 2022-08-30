@@ -1,0 +1,533 @@
+13:56:19.717 HTTP listening on *:2080
+13:56:19.717 Matchmaker listening on *:2081
+13:56:22.153 Message TYPE: connect
+13:56:22.154 Adding connection for localhost with playerConnected: false
+13:56:32.469 WARNING: No empty Cirrus servers are available
+13:56:42.107 Message TYPE: ping
+13:56:42.497 WARNING: No empty Cirrus servers are available
+13:56:53.031 WARNING: No empty Cirrus servers are available
+13:57:12.107 Message TYPE: ping
+13:57:13.031 WARNING: No empty Cirrus servers are available
+13:57:33.029 WARNING: No empty Cirrus servers are available
+13:57:42.134 Message TYPE: ping
+13:57:53.030 WARNING: No empty Cirrus servers are available
+13:58:12.163 Message TYPE: ping
+13:58:13.029 WARNING: No empty Cirrus servers are available
+13:58:29.712 Message TYPE: streamerConnected
+13:58:29.712 Cirrus server localhost:80 ready for use
+13:58:33.031 Redirect to localhost:80
+13:58:41.774 Message TYPE: clientConnected
+13:58:41.774 Client connected to Cirrus server localhost:80
+13:58:42.162 Message TYPE: ping
+13:59:12.185 Message TYPE: ping
+13:59:42.193 Message TYPE: ping
+14:00:08.100 ERROR (SyntaxError: Unexpected token G in JSON at position 0): Failed to parse Cirrus information from data: GET / HTTP/1.1
+Host: localhost:2081
+Connection: keep-alive
+sec-ch-ua: "Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: Hm_lvt_840c33c5140908de50ebffc4294e7dbf=1633917752,1635140399,1635746442,1635903869; p_alias=%253Cfe%2560%2560eebipj; p_alias_p=O%25AC%25D1%25E1%25ADppp; p_alias_a=; bindId=7737d6e63e0a48b198c2dc01d43b51b6; watermark_content_current=ggg%202791
+
+
+14:00:08.101 Ending connection to remote address ::1
+14:00:08.101 ERROR (SyntaxError: Unexpected token G in JSON at position 0): Failed to parse Cirrus information from data: GET / HTTP/1.1
+Host: localhost:2081
+Connection: keep-alive
+sec-ch-ua: "Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: Hm_lvt_840c33c5140908de50ebffc4294e7dbf=1633917752,1635140399,1635746442,1635903869; p_alias=%253Cfe%2560%2560eebipj; p_alias_p=O%25AC%25D1%25E1%25ADppp; p_alias_a=; bindId=7737d6e63e0a48b198c2dc01d43b51b6; watermark_content_current=ggg%202791
+
+
+14:00:08.101 Ending connection to remote address ::1
+14:00:08.102 ERROR (SyntaxError: Unexpected token G in JSON at position 0): Failed to parse Cirrus information from data: GET / HTTP/1.1
+Host: localhost:2081
+Connection: keep-alive
+sec-ch-ua: "Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: Hm_lvt_840c33c5140908de50ebffc4294e7dbf=1633917752,1635140399,1635746442,1635903869; p_alias=%253Cfe%2560%2560eebipj; p_alias_p=O%25AC%25D1%25E1%25ADppp; p_alias_a=; bindId=7737d6e63e0a48b198c2dc01d43b51b6; watermark_content_current=ggg%202791
+
+
+14:00:08.102 Ending connection to remote address ::1
+14:00:09.122 ERROR (SyntaxError: Unexpected token G in JSON at position 0): Failed to parse Cirrus information from data: GET / HTTP/1.1
+Host: localhost:2081
+Connection: keep-alive
+Cache-Control: max-age=0
+sec-ch-ua: "Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: Hm_lvt_840c33c5140908de50ebffc4294e7dbf=1633917752,1635140399,1635746442,1635903869; p_alias=%253Cfe%2560%2560eebipj; p_alias_p=O%25AC%25D1%25E1%25ADppp; p_alias_a=; bindId=7737d6e63e0a48b198c2dc01d43b51b6; watermark_content_current=ggg%202791
+
+
+14:00:09.122 Ending connection to remote address ::1
+14:00:09.124 ERROR (SyntaxError: Unexpected token G in JSON at position 0): Failed to parse Cirrus information from data: GET / HTTP/1.1
+Host: localhost:2081
+Connection: keep-alive
+Cache-Control: max-age=0
+sec-ch-ua: "Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: Hm_lvt_840c33c5140908de50ebffc4294e7dbf=1633917752,1635140399,1635746442,1635903869; p_alias=%253Cfe%2560%2560eebipj; p_alias_p=O%25AC%25D1%25E1%25ADppp; p_alias_a=; bindId=7737d6e63e0a48b198c2dc01d43b51b6; watermark_content_current=ggg%202791
+
+
+14:00:09.125 Ending connection to remote address ::1
+14:00:09.125 ERROR (SyntaxError: Unexpected token G in JSON at position 0): Failed to parse Cirrus information from data: GET / HTTP/1.1
+Host: localhost:2081
+Connection: keep-alive
+Cache-Control: max-age=0
+sec-ch-ua: "Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: Hm_lvt_840c33c5140908de50ebffc4294e7dbf=1633917752,1635140399,1635746442,1635903869; p_alias=%253Cfe%2560%2560eebipj; p_alias_p=O%25AC%25D1%25E1%25ADppp; p_alias_a=; bindId=7737d6e63e0a48b198c2dc01d43b51b6; watermark_content_current=ggg%202791
+
+
+14:00:09.125 Ending connection to remote address ::1
+14:00:11.990 WARNING: No empty Cirrus servers are available
+14:00:12.194 Message TYPE: ping
+14:00:22.030 WARNING: No empty Cirrus servers are available
+14:00:24.613 Message TYPE: clientConnected
+14:00:24.613 Client connected to Cirrus server localhost:80
+14:00:38.045 WARNING: No empty Cirrus servers are available
+14:00:41.927 Message TYPE: clientDisconnected
+14:00:41.927 Client disconnected from Cirrus server localhost:80
+14:00:42.193 Message TYPE: ping
+14:00:56.029 WARNING: No empty Cirrus servers are available
+14:01:12.224 Message TYPE: ping
+14:01:16.031 WARNING: No empty Cirrus servers are available
+14:01:36.033 WARNING: No empty Cirrus servers are available
+14:01:42.233 Message TYPE: ping
+14:01:56.031 WARNING: No empty Cirrus servers are available
+14:02:12.261 Message TYPE: ping
+14:02:16.031 WARNING: No empty Cirrus servers are available
+14:02:36.030 WARNING: No empty Cirrus servers are available
+14:02:42.273 Message TYPE: ping
+14:02:56.031 WARNING: No empty Cirrus servers are available
+14:03:12.303 Message TYPE: ping
+14:03:16.030 WARNING: No empty Cirrus servers are available
+14:03:36.032 WARNING: No empty Cirrus servers are available
+14:03:42.314 Message TYPE: ping
+14:03:56.030 WARNING: No empty Cirrus servers are available
+14:04:12.341 Message TYPE: ping
+14:04:16.031 WARNING: No empty Cirrus servers are available
+14:04:36.030 WARNING: No empty Cirrus servers are available
+14:04:42.353 Message TYPE: ping
+14:04:56.030 WARNING: No empty Cirrus servers are available
+14:05:12.383 Message TYPE: ping
+14:05:16.029 WARNING: No empty Cirrus servers are available
+14:05:36.030 WARNING: No empty Cirrus servers are available
+14:05:42.393 Message TYPE: ping
+14:06:12.421 Message TYPE: ping
+14:06:42.433 Message TYPE: ping
+14:07:12.461 Message TYPE: ping
+14:07:42.473 Message TYPE: ping
+14:08:00.029 WARNING: No empty Cirrus servers are available
+14:08:12.502 Message TYPE: ping
+14:08:20.032 WARNING: No empty Cirrus servers are available
+14:08:40.031 WARNING: No empty Cirrus servers are available
+14:08:42.515 Message TYPE: ping
+14:09:00.031 WARNING: No empty Cirrus servers are available
+14:09:12.541 Message TYPE: ping
+14:09:20.031 WARNING: No empty Cirrus servers are available
+14:09:40.030 WARNING: No empty Cirrus servers are available
+14:09:42.553 Message TYPE: ping
+14:10:00.030 WARNING: No empty Cirrus servers are available
+14:10:12.581 Message TYPE: ping
+14:10:20.030 WARNING: No empty Cirrus servers are available
+14:10:21.226 Message TYPE: clientDisconnected
+14:10:21.226 Client disconnected from Cirrus server localhost:80
+14:10:30.207 Message TYPE: clientConnected
+14:10:30.207 Client connected to Cirrus server localhost:80
+14:10:40.030 WARNING: No empty Cirrus servers are available
+14:10:42.585 Message TYPE: ping
+14:11:00.030 WARNING: No empty Cirrus servers are available
+14:11:12.613 Message TYPE: ping
+14:11:20.030 WARNING: No empty Cirrus servers are available
+14:11:40.029 WARNING: No empty Cirrus servers are available
+14:11:42.625 Message TYPE: ping
+14:12:00.030 WARNING: No empty Cirrus servers are available
+14:12:12.653 Message TYPE: ping
+14:12:20.031 WARNING: No empty Cirrus servers are available
+14:12:40.031 WARNING: No empty Cirrus servers are available
+14:12:42.665 Message TYPE: ping
+14:13:08.031 WARNING: No empty Cirrus servers are available
+14:13:12.694 Message TYPE: ping
+14:13:42.706 Message TYPE: ping
+14:14:12.734 Message TYPE: ping
+14:14:21.969 Message TYPE: clientConnected
+14:14:21.969 Client connected to Cirrus server localhost:80
+14:14:42.030 WARNING: No empty Cirrus servers are available
+14:14:42.747 Message TYPE: ping
+14:15:02.029 WARNING: No empty Cirrus servers are available
+14:15:12.748 Message TYPE: ping
+14:15:22.030 WARNING: No empty Cirrus servers are available
+14:15:42.031 WARNING: No empty Cirrus servers are available
+14:15:42.760 Message TYPE: ping
+14:15:53.785 WARNING: No empty Cirrus servers are available
+14:15:54.714 WARNING: No empty Cirrus servers are available
+14:16:05.030 WARNING: No empty Cirrus servers are available
+14:16:12.762 Message TYPE: ping
+14:16:25.030 WARNING: No empty Cirrus servers are available
+14:16:31.855 ERROR (SyntaxError: Unexpected token G in JSON at position 0): Failed to parse Cirrus information from data: GET / HTTP/1.1
+Host: localhost:2081
+Connection: keep-alive
+sec-ch-ua: "Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: Hm_lvt_840c33c5140908de50ebffc4294e7dbf=1633917752,1635140399,1635746442,1635903869; p_alias=%253Cfe%2560%2560eebipj; p_alias_p=O%25AC%25D1%25E1%25ADppp; p_alias_a=; bindId=7737d6e63e0a48b198c2dc01d43b51b6; watermark_content_current=ggg%202791
+
+
+14:16:31.855 Ending connection to remote address ::1
+14:16:31.855 ERROR (SyntaxError: Unexpected token G in JSON at position 0): Failed to parse Cirrus information from data: GET / HTTP/1.1
+Host: localhost:2081
+Connection: keep-alive
+sec-ch-ua: "Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: Hm_lvt_840c33c5140908de50ebffc4294e7dbf=1633917752,1635140399,1635746442,1635903869; p_alias=%253Cfe%2560%2560eebipj; p_alias_p=O%25AC%25D1%25E1%25ADppp; p_alias_a=; bindId=7737d6e63e0a48b198c2dc01d43b51b6; watermark_content_current=ggg%202791
+
+
+14:16:31.855 Ending connection to remote address ::1
+14:16:31.856 ERROR (SyntaxError: Unexpected token G in JSON at position 0): Failed to parse Cirrus information from data: GET / HTTP/1.1
+Host: localhost:2081
+Connection: keep-alive
+sec-ch-ua: "Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: Hm_lvt_840c33c5140908de50ebffc4294e7dbf=1633917752,1635140399,1635746442,1635903869; p_alias=%253Cfe%2560%2560eebipj; p_alias_p=O%25AC%25D1%25E1%25ADppp; p_alias_a=; bindId=7737d6e63e0a48b198c2dc01d43b51b6; watermark_content_current=ggg%202791
+
+
+14:16:31.856 Ending connection to remote address ::1
+14:16:32.880 ERROR (SyntaxError: Unexpected token G in JSON at position 0): Failed to parse Cirrus information from data: GET / HTTP/1.1
+Host: localhost:2081
+Connection: keep-alive
+Cache-Control: max-age=0
+sec-ch-ua: "Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: Hm_lvt_840c33c5140908de50ebffc4294e7dbf=1633917752,1635140399,1635746442,1635903869; p_alias=%253Cfe%2560%2560eebipj; p_alias_p=O%25AC%25D1%25E1%25ADppp; p_alias_a=; bindId=7737d6e63e0a48b198c2dc01d43b51b6; watermark_content_current=ggg%202791
+
+
+14:16:32.880 Ending connection to remote address ::1
+14:16:32.880 ERROR (SyntaxError: Unexpected token G in JSON at position 0): Failed to parse Cirrus information from data: GET / HTTP/1.1
+Host: localhost:2081
+Connection: keep-alive
+Cache-Control: max-age=0
+sec-ch-ua: "Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: Hm_lvt_840c33c5140908de50ebffc4294e7dbf=1633917752,1635140399,1635746442,1635903869; p_alias=%253Cfe%2560%2560eebipj; p_alias_p=O%25AC%25D1%25E1%25ADppp; p_alias_a=; bindId=7737d6e63e0a48b198c2dc01d43b51b6; watermark_content_current=ggg%202791
+
+
+14:16:32.880 Ending connection to remote address ::1
+14:16:32.881 ERROR (SyntaxError: Unexpected token G in JSON at position 0): Failed to parse Cirrus information from data: GET / HTTP/1.1
+Host: localhost:2081
+Connection: keep-alive
+Cache-Control: max-age=0
+sec-ch-ua: "Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: Hm_lvt_840c33c5140908de50ebffc4294e7dbf=1633917752,1635140399,1635746442,1635903869; p_alias=%253Cfe%2560%2560eebipj; p_alias_p=O%25AC%25D1%25E1%25ADppp; p_alias_a=; bindId=7737d6e63e0a48b198c2dc01d43b51b6; watermark_content_current=ggg%202791
+
+
+14:16:32.881 Ending connection to remote address ::1
+14:16:36.802 WARNING: No empty Cirrus servers are available
+14:16:42.773 Message TYPE: ping
+14:16:44.542 Message TYPE: clientDisconnected
+14:16:44.542 Client disconnected from Cirrus server localhost:80
+14:16:44.542 WARNING: No empty Cirrus servers are available
+14:16:46.829 WARNING: No empty Cirrus servers are available
+14:16:54.569 WARNING: No empty Cirrus servers are available
+14:16:57.031 WARNING: No empty Cirrus servers are available
+14:17:04.582 WARNING: No empty Cirrus servers are available
+14:17:12.801 Message TYPE: ping
+14:17:14.594 WARNING: No empty Cirrus servers are available
+14:17:17.030 WARNING: No empty Cirrus servers are available
+14:17:24.607 WARNING: No empty Cirrus servers are available
+14:17:34.620 WARNING: No empty Cirrus servers are available
+14:17:37.029 WARNING: No empty Cirrus servers are available
+14:17:42.813 Message TYPE: ping
+14:17:44.633 WARNING: No empty Cirrus servers are available
+14:17:54.644 WARNING: No empty Cirrus servers are available
+14:17:57.029 WARNING: No empty Cirrus servers are available
+14:18:04.656 WARNING: No empty Cirrus servers are available
+14:18:12.841 Message TYPE: ping
+14:18:14.669 WARNING: No empty Cirrus servers are available
+14:18:17.029 WARNING: No empty Cirrus servers are available
+14:18:24.680 WARNING: No empty Cirrus servers are available
+14:18:34.692 WARNING: No empty Cirrus servers are available
+14:18:37.029 WARNING: No empty Cirrus servers are available
+14:18:42.854 Message TYPE: ping
+14:18:44.706 WARNING: No empty Cirrus servers are available
+14:18:54.718 WARNING: No empty Cirrus servers are available
+14:18:57.030 WARNING: No empty Cirrus servers are available
+14:19:04.732 WARNING: No empty Cirrus servers are available
+14:19:12.881 Message TYPE: ping
+14:19:14.749 WARNING: No empty Cirrus servers are available
+14:19:17.030 WARNING: No empty Cirrus servers are available
+14:19:24.762 WARNING: No empty Cirrus servers are available
+14:19:34.774 WARNING: No empty Cirrus servers are available
+14:19:37.031 WARNING: No empty Cirrus servers are available
+14:19:42.893 Message TYPE: ping
+14:19:44.788 WARNING: No empty Cirrus servers are available
+14:19:54.801 WARNING: No empty Cirrus servers are available
+14:19:57.030 WARNING: No empty Cirrus servers are available
+14:20:04.814 WARNING: No empty Cirrus servers are available
+14:20:12.921 Message TYPE: ping
+14:20:14.827 WARNING: No empty Cirrus servers are available
+14:20:17.030 WARNING: No empty Cirrus servers are available
+14:20:24.840 WARNING: No empty Cirrus servers are available
+14:20:34.852 WARNING: No empty Cirrus servers are available
+14:20:37.030 WARNING: No empty Cirrus servers are available
+14:20:44.865 WARNING: No empty Cirrus servers are available
+14:20:54.878 WARNING: No empty Cirrus servers are available
+14:20:57.030 WARNING: No empty Cirrus servers are available
+14:21:04.890 WARNING: No empty Cirrus servers are available
+14:21:14.902 WARNING: No empty Cirrus servers are available
+14:21:17.030 WARNING: No empty Cirrus servers are available
+14:21:24.915 WARNING: No empty Cirrus servers are available
+14:21:34.927 WARNING: No empty Cirrus servers are available
+14:21:37.028 WARNING: No empty Cirrus servers are available
+14:21:44.940 WARNING: No empty Cirrus servers are available
+14:21:54.955 WARNING: No empty Cirrus servers are available
+14:22:04.968 WARNING: No empty Cirrus servers are available
+14:22:14.980 WARNING: No empty Cirrus servers are available
+14:22:24.992 WARNING: No empty Cirrus servers are available
+14:22:35.005 WARNING: No empty Cirrus servers are available
+14:22:45.017 WARNING: No empty Cirrus servers are available
+14:22:55.031 WARNING: No empty Cirrus servers are available
+14:23:05.046 WARNING: No empty Cirrus servers are available
+14:23:15.057 WARNING: No empty Cirrus servers are available
+14:23:25.069 WARNING: No empty Cirrus servers are available
+14:23:35.082 WARNING: No empty Cirrus servers are available
+14:23:45.096 WARNING: No empty Cirrus servers are available
+14:23:55.107 WARNING: No empty Cirrus servers are available
+14:24:05.119 WARNING: No empty Cirrus servers are available
+14:24:15.131 WARNING: No empty Cirrus servers are available
+14:24:25.144 WARNING: No empty Cirrus servers are available
+14:24:35.155 WARNING: No empty Cirrus servers are available
+14:24:45.167 WARNING: No empty Cirrus servers are available
+14:24:55.180 WARNING: No empty Cirrus servers are available
+14:25:05.192 WARNING: No empty Cirrus servers are available
+14:25:15.203 WARNING: No empty Cirrus servers are available
+14:25:25.216 WARNING: No empty Cirrus servers are available
+14:25:35.229 WARNING: No empty Cirrus servers are available
+14:25:45.241 WARNING: No empty Cirrus servers are available
+14:25:55.253 WARNING: No empty Cirrus servers are available
+14:26:05.268 WARNING: No empty Cirrus servers are available
+14:26:08.033 WARNING: No empty Cirrus servers are available
+14:26:15.281 WARNING: No empty Cirrus servers are available
+14:26:25.293 WARNING: No empty Cirrus servers are available
+14:26:35.307 WARNING: No empty Cirrus servers are available
+14:26:45.319 WARNING: No empty Cirrus servers are available
+14:26:55.331 WARNING: No empty Cirrus servers are available
+14:27:05.344 WARNING: No empty Cirrus servers are available
+14:27:15.357 WARNING: No empty Cirrus servers are available
+14:27:25.370 WARNING: No empty Cirrus servers are available
+14:27:35.383 WARNING: No empty Cirrus servers are available
+14:27:45.395 WARNING: No empty Cirrus servers are available
+14:27:55.407 WARNING: No empty Cirrus servers are available
+14:28:05.420 WARNING: No empty Cirrus servers are available
+14:28:15.433 WARNING: No empty Cirrus servers are available
+14:28:25.445 WARNING: No empty Cirrus servers are available
+14:28:35.458 WARNING: No empty Cirrus servers are available
+14:28:45.470 WARNING: No empty Cirrus servers are available
+14:28:55.487 WARNING: No empty Cirrus servers are available
+14:29:05.499 WARNING: No empty Cirrus servers are available
+14:29:15.510 WARNING: No empty Cirrus servers are available
+14:29:25.523 WARNING: No empty Cirrus servers are available
+14:29:35.535 WARNING: No empty Cirrus servers are available
+14:29:45.548 WARNING: No empty Cirrus servers are available
+14:29:55.561 WARNING: No empty Cirrus servers are available
+14:30:05.575 WARNING: No empty Cirrus servers are available
+14:30:15.589 WARNING: No empty Cirrus servers are available
+14:30:25.603 WARNING: No empty Cirrus servers are available
+14:30:35.615 WARNING: No empty Cirrus servers are available
+14:30:45.627 WARNING: No empty Cirrus servers are available
+14:30:55.640 WARNING: No empty Cirrus servers are available
+14:31:05.652 WARNING: No empty Cirrus servers are available
+14:31:08.945 Message TYPE: connect
+14:31:08.945 RECONNECT: cirrus server address localhost already found--replacing. playerConnected: false
+14:31:08.945 Replacing server with original with numConn: 0
+14:31:08.955 Message TYPE: streamerConnected
+14:31:08.955 Cirrus server localhost:80 ready for use
+14:31:15.664 Redirect to localhost:80
+14:31:38.949 Message TYPE: ping
+14:32:06.261 Message TYPE: clientConnected
+14:32:06.261 Client connected to Cirrus server localhost:80
+14:32:08.030 WARNING: No empty Cirrus servers are available
+14:32:08.952 Message TYPE: ping
+14:32:16.036 Message TYPE: clientDisconnected
+14:32:16.036 Client disconnected from Cirrus server localhost:80
+14:32:38.974 Message TYPE: ping
+14:34:08.919 Message TYPE: connect
+14:34:08.919 Adding connection for localhost with playerConnected: false
+14:34:38.915 Message TYPE: ping
+14:35:08.945 Message TYPE: ping
+14:35:38.974 Message TYPE: ping
+14:35:56.030 Redirect to localhost:80
+14:36:08.977 Message TYPE: ping
+14:36:39.005 Message TYPE: ping
+14:37:09.034 Message TYPE: ping
+14:37:39.065 Message TYPE: ping
+14:38:09.093 Message TYPE: ping
+14:38:39.094 Message TYPE: ping
+14:39:09.093 Message TYPE: ping
+14:39:39.093 Message TYPE: ping
+14:40:09.094 Message TYPE: ping
+14:40:39.094 Message TYPE: ping
+14:40:56.257 Message TYPE: connect
+14:40:56.258 Adding connection for localhost with playerConnected: false
+14:41:09.093 Message TYPE: ping
+14:41:26.265 Message TYPE: ping
+14:41:39.094 Message TYPE: ping
+14:41:50.596 Message TYPE: streamerConnected
+14:41:50.596 Cirrus server localhost:7001 ready for use
+14:41:52.321 Message TYPE: clientConnected
+14:41:52.321 Client connected to Cirrus server localhost:7001
+14:41:56.295 Message TYPE: ping
+14:42:09.094 Message TYPE: ping
+14:42:22.842 Redirect to localhost:80
+14:42:26.309 Message TYPE: ping
+14:42:29.495 WARNING: No empty Cirrus servers are available
+14:42:39.121 Message TYPE: ping
+14:42:39.521 WARNING: No empty Cirrus servers are available
+14:42:50.030 WARNING: No empty Cirrus servers are available
+14:42:56.339 Message TYPE: ping
+14:43:09.137 Message TYPE: ping
+14:43:10.031 Redirect to localhost:80
+14:43:26.369 Message TYPE: ping
+14:43:39.165 Message TYPE: ping
+14:43:56.397 Message TYPE: ping
+14:44:09.183 Message TYPE: ping
+14:44:26.425 Message TYPE: ping
+14:44:39.209 Message TYPE: ping
+14:44:56.453 Message TYPE: ping
+14:45:09.225 Message TYPE: ping
+14:45:26.481 Message TYPE: ping
+14:45:30.979 Redirect to localhost:80
+14:45:39.254 Message TYPE: ping
+14:45:56.511 Message TYPE: ping
+14:46:09.270 Message TYPE: ping
+14:46:26.537 Message TYPE: ping
+14:46:39.297 Message TYPE: ping
+14:46:39.562 Redirect to localhost:80
+14:46:44.401 WARNING: No empty Cirrus servers are available
+14:46:48.194 WARNING: No empty Cirrus servers are available
+14:46:56.565 Message TYPE: ping
+14:46:58.206 WARNING: No empty Cirrus servers are available
+14:47:08.218 WARNING: No empty Cirrus servers are available
+14:47:09.316 Message TYPE: ping
+14:47:18.230 WARNING: No empty Cirrus servers are available
+14:47:26.595 Message TYPE: ping
+14:47:28.242 Redirect to localhost:80
+14:47:39.345 Message TYPE: ping

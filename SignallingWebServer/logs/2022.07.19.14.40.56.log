@@ -1,0 +1,46 @@
+14:40:56.227 Config: {
+	"UseFrontend": true,
+	"UseMatchmaker": true,
+	"UseHTTPS": false,
+	"UseAuthentication": false,
+	"LogToFile": true,
+	"LogVerbose": true,
+	"HomepageFile": "/Public/player.html",
+	"AdditionalRoutes": {},
+	"EnableWebserver": true,
+	"MatchmakerAddress": "localhost",
+	"MatchmakerPort": "2081",
+	"PublicIp": "localhost",
+	"HttpPort": 6001,
+	"HttpsPort": 443,
+	"StreamerPort": 6002,
+	"SFUPort": 6003,
+	"peerConnectionOptions": "{\"iceServers\":[{\"urls\":[\"stun:stun.l.google.com:19302\"]}]}",
+	"publicIp": [
+		"127.0.0.1",
+		"127.0.0.1"
+	],
+	"matchmakerAddress": "127.0.0.1",
+	"matchmakerPort": 2081
+}
+14:40:56.239 peerConnectionOptions = {"iceServers":[{"urls":["stun:stun.l.google.com:19302"]}]}
+14:40:56.250 Running Cirrus - The Pixel Streaming reference implementation signalling server for Unreal Engine 5.0.
+14:40:56.253 WebSocket listening for Streamer connections on :6002
+14:40:56.254 WebSocket listening for SFU connections on :6003
+14:40:56.254 WebSocket listening for Players connections on :6001
+14:40:56.255 Http listening on *: 6001
+14:40:56.257 Cirrus connected to Matchmaker localhost:2081
+14:47:51.004 Matchmaker connection ended
+14:47:51.004 Setting Keep Alive to true
+14:47:51.005 Matchmaker connection closed (hadError=false)
+14:47:51.005 Try reconnect to Matchmaker in 5 seconds
+14:47:56.009 Cirrus connected to Matchmaker localhost:2081
+14:50:01.321 Matchmaker connection ended
+14:50:01.321 Setting Keep Alive to true
+14:50:01.321 Matchmaker connection closed (hadError=false)
+14:50:01.321 Try reconnect to Matchmaker in 5 seconds
+14:50:06.325 Cirrus connected to Matchmaker localhost:2081
+14:53:03.432 Streamer connected: ::ffff:127.0.0.1
+14:53:03.699 killing all players
+14:53:51.391 Streamer connected: ::ffff:127.0.0.1
+14:53:51.609 killing all players

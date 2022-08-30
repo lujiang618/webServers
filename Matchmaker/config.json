@@ -1,0 +1,6 @@
+{
+	"HttpPort": 2080,
+	"UseHTTPS": false,
+	"MatchmakerPort": 2081,
+	"LogToFile": true
+}

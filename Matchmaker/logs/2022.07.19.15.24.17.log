@@ -1,0 +1,76 @@
+15:24:17.968 HTTP listening on *:2080
+15:24:17.968 Matchmaker listening on *:2081
+15:24:21.364 Message TYPE: connect
+15:24:21.364 Adding connection for localhost with playerConnected: false
+15:24:32.038 Redirect to localhost:7001
+15:24:48.357 Message TYPE: ping
+15:26:23.090 Message TYPE: connect
+15:26:23.091 Adding connection for 192 with playerConnected: false
+15:26:23.094 Message TYPE: streamerConnected
+15:26:23.094 Cirrus server 192.168.99.145:7001 ready for use
+15:26:35.627 Redirect to localhost:7001
+15:26:47.088 Redirect to 192.168.99.145:7001
+15:26:53.088 Message TYPE: ping
+15:27:01.278 WARNING: No empty Cirrus servers are available
+15:27:03.327 WARNING: No empty Cirrus servers are available
+15:27:04.202 WARNING: No empty Cirrus servers are available
+15:27:06.243 WARNING: No empty Cirrus servers are available
+15:27:08.281 WARNING: No empty Cirrus servers are available
+15:27:10.325 WARNING: No empty Cirrus servers are available
+15:27:12.377 WARNING: No empty Cirrus servers are available
+15:27:14.413 WARNING: No empty Cirrus servers are available
+15:27:16.452 WARNING: No empty Cirrus servers are available
+15:27:18.496 WARNING: No empty Cirrus servers are available
+15:27:20.539 WARNING: No empty Cirrus servers are available
+15:27:22.571 Redirect to localhost:7001
+15:27:23.118 Message TYPE: ping
+15:27:53.146 Message TYPE: ping
+15:27:54.271 Redirect to 192.168.99.145:7001
+15:28:03.086 WARNING: No empty Cirrus servers are available
+15:28:05.109 WARNING: No empty Cirrus servers are available
+15:28:07.121 WARNING: No empty Cirrus servers are available
+15:28:09.132 Redirect to localhost:7001
+15:28:23.146 Message TYPE: ping
+15:28:42.149 Message TYPE: clientConnected
+15:28:42.149 Client connected to Cirrus server 192.168.99.145:7001
+15:28:53.148 Message TYPE: ping
+15:29:23.148 Message TYPE: ping
+15:29:53.177 Message TYPE: ping
+15:30:23.177 Message TYPE: ping
+15:30:53.205 Message TYPE: ping
+15:31:15.798 Message TYPE: clientDisconnected
+15:31:15.798 Client disconnected from Cirrus server 192.168.99.145:7001
+15:31:23.206 Message TYPE: ping
+15:31:53.233 Message TYPE: ping
+15:32:23.234 Message TYPE: ping
+15:32:53.263 Message TYPE: ping
+15:33:23.263 Message TYPE: ping
+15:33:53.289 Message TYPE: ping
+15:34:23.290 Message TYPE: ping
+15:34:53.317 Message TYPE: ping
+15:35:23.317 Message TYPE: ping
+15:35:53.347 Message TYPE: ping
+15:36:23.348 Message TYPE: ping
+15:36:53.377 Message TYPE: ping
+15:37:23.377 Message TYPE: ping
+15:37:53.406 Message TYPE: ping
+15:38:23.407 Message TYPE: ping
+15:38:53.433 Message TYPE: ping
+15:39:23.433 Message TYPE: ping
+15:39:53.461 Message TYPE: ping
+15:40:23.462 Message TYPE: ping
+15:40:53.475 Message TYPE: ping
+15:41:23.475 Message TYPE: ping
+15:41:53.505 Message TYPE: ping
+15:42:23.506 Message TYPE: ping
+15:42:53.533 Message TYPE: ping
+15:43:23.534 Message TYPE: ping
+15:43:53.561 Message TYPE: ping
+15:44:23.562 Message TYPE: ping
+15:44:53.592 Message TYPE: ping
+15:45:23.593 Message TYPE: ping
+15:45:53.621 Message TYPE: ping
+15:46:23.621 Message TYPE: ping
+15:46:53.649 Message TYPE: ping
+15:47:23.649 Message TYPE: ping
+15:47:53.677 Message TYPE: ping
