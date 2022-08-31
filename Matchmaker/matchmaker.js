@@ -16,7 +16,7 @@ const defaultConfig = {
     StandbyNum: 1,
     InitSSNum: 1,
     Address: "192.168.99.145",
-    ControllerInterval: 1000*10,
+    ControllerInterval: 1000*60,
     StreamerRunPath: "../../../../UDxyLauncher.sh",
     CirrusRunPath: "./start.sh"
 };
