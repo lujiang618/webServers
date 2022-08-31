@@ -1,7 +1,7 @@
 #!/bin/bash
 # Copyright Epic Games, Inc. All Rights Reserved.
 
-source Start_Common.sh
+source ./Start_Common.sh
 
 set_start_default_values "n" "y" # Only STUN server defaults
 use_args "$@"
@@ -17,5 +17,7 @@ arguments+=" ${cirruscmd}"
 
 pushd ../..
 echo "Running: $process $arguments"
-sudo $process $arguments
+
+# 自动输入密码
+echo "gelu8888" | sudo $process $arguments
 popd

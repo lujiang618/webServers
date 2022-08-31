@@ -10,8 +10,18 @@ const defaultConfig = {
 	MatchmakerPort: 2081,
 
 	// Log to file
-	LogToFile: true
+	LogToFile: true,
+    inited: false,
+
+    StandbyNum: 1,
+    InitSSNum: 1,
+    Address: "192.168.99.145",
+    ControllerInterval: 1000*10,
+    StreamerRunPath: "../../../../UDxyLauncher.sh",
+    CirrusRunPath: "./start.sh"
 };
+
+var childProcessMap = new Map()
 
 // Similar to the Signaling Server (SS) code, load in a config.json file for the MM parameters
 const argv = require('yargs').argv;
@@ -28,6 +38,7 @@ const http = require('http').Server(app);
 const fs = require('fs');
 const path = require('path');
 const logging = require('./modules/logging.js');
+const { exec } = require('child_process');
 logging.RegisterConsoleLogger();
 
 if (config.LogToFile) {
@@ -46,6 +57,24 @@ if (typeof argv.HttpPort != 'undefined') {
 }
 if (typeof argv.MatchmakerPort != 'undefined') {
 	config.MatchmakerPort = argv.MatchmakerPort;
+}
+if (typeof argv.StandbyNum != 'undefined') {
+	config.StandbyNum = argv.StandbyNum;
+}
+if (typeof argv.InitSSNum != 'undefined') {
+	config.InitSSNum = argv.InitSSNum;
+}
+if (typeof argv.Address != 'undefined') {
+	config.Address = argv.Address;
+}
+if (typeof argv.ControllerInterval != 'undefined') {
+	config.ControllerInterval = argv.ControllerInterval;
+}
+if (typeof argv.StreamerRunPath != 'undefined') {
+	config.StreamerRunPath = argv.StreamerRunPath;
+}
+if (typeof argv.CirrusRunPath != 'undefined') {
+	config.CirrusRunPath = argv.CirrusRunPath;
 }
 
 http.listen(config.HttpPort, () => {
@@ -124,6 +153,39 @@ function getAvailableCirrusServer() {
 	return undefined;
 }
 
+function getAvailableCirrusServerCount() {
+    let availableCount = 0
+
+    for (cirrusServer of cirrusServers.values()) {
+		if (cirrusServer.numConnectedClients === 0 && cirrusServer.ready === true) {
+
+			// Check if we had at least 45 seconds since the last redirect, avoiding the
+			// chance of redirecting 2+ users to the same SS before they click Play.
+			if( cirrusServer.lastRedirect ) {
+				if( ((Date.now() - cirrusServer.lastRedirect) / 1000) < 45 )
+					continue;
+			}
+			cirrusServer.lastRedirect = Date.now();
+
+			availableCount++
+		}
+	}
+
+    return availableCount
+}
+
+function getReadyCirrusServerCount() {
+    let readyCount = 0
+
+    for (cirrusServer of cirrusServers.values()) {
+		if (cirrusServer.ready === true) {
+			readyCount++
+		}
+	}
+
+    return readyCount
+}
+
 if(enableRESTAPI) {
 	// Handle REST signalling server only request.
 	app.options('/signallingserver', cors())
@@ -174,13 +236,161 @@ function disconnect(connection) {
 	connection.end();
 }
 
+let maxPort = 7001
+function controller() {
+    console.log("controller start.......................")
+
+    const availableCount = getAvailableCirrusServerCount()
+
+    console.log("serverCount", cirrusServers.size)
+    console.log("availableCount",availableCount)
+
+    add(getAddNum(availableCount))
+    reduce(getReduceNum(availableCount))
+
+    if (!config.inited) config.inited = true
+}
+
+function getAddNum(availableCount) {
+    const serverCount = cirrusServers.size
+    if (serverCount>30) return 0
+
+    if (!config.inited)  return config.InitSSNum
+
+    const childProcessCount = childProcessMap.size
+    const readyCount = getReadyCirrusServerCount()
+
+    if (childProcessCount-readyCount >= config.StandbyNum) return 0  // 启动中streamer数量 >= 备用数量时 不在启动新的streamer
+
+    if (availableCount >= config.StandbyNum) return 0
+
+    return config.StandbyNum - availableCount
+}
+
+function getReduceNum(availableCount) {
+    const serverCount = cirrusServers.size
+    if (serverCount < config.InitSSNum) return 0
+
+    const readyCount = getReadyCirrusServerCount()
+    if (readyCount <= config.InitSSNum) return 0
+
+    if (availableCount <= config.StandbyNum) return 0
+
+    return availableCount - config.StandbyNum
+}
+
+// 只关streamer不关闭signalling
+// TODO: 不应该频繁的kill 进程
+function reduce(num) {
+    console.log("reduce number ",num)
+    if (num == 0) return
+
+    let reduceNum = 0
+    for (cirrusServer of cirrusServers.values()) {
+        if (reduceNum >= num) return
+		if (cirrusServer.numConnectedClients !== 0 || !cirrusServer.ready) continue
+
+        console.log("reduce cirrusServer",cirrusServer)
+        const cirrusProcess = childProcessMap.get(cirrusServer.port)
+        if (cirrusProcess) {
+            cirrusServer.ready = false
+            cirrusProcess.kill()
+            reduceNum++
+        }
+	}
+}
+
+function add(num) {
+    console.log("add number ",num)
+    if (num == 0) return
+
+    let addNum = 0
+    for (cirrusServer of cirrusServers.values()) {
+		if (addNum === num) return
+		if (cirrusServer.ready === true) continue
+        if (childProcessMap.has(cirrusServer.port)) continue
+
+        console.log("add cirrusServer",cirrusServer)
+        runStreamer(cirrusServer.port, parseInt(cirrusServer.port)+1)
+        addNum++
+	}
+
+	if (addNum === num) return
+
+    // 单机不能无限制的启动，最多 99/3 = 33 个服务器
+    if ( maxPort > 7099) return
+
+    for (let i=addNum; i<num; i++) {
+        const currentHttpPort =  maxPort++
+        const currentStreamerPort =  maxPort++
+        const currentSFUPort =  maxPort++
+
+        runCirrus(currentHttpPort, currentStreamerPort, currentSFUPort)
+        runStreamer(currentHttpPort, currentStreamerPort)
+    }
+}
+
+function runCirrus(httpPort, streamerPort, SFUPort) {
+    let cmdArr = [
+        config.CirrusRunPath,
+        "--UseMatchmaker --matchmakerAddress",
+        config.Address,
+        "--matchmakerPort",
+        config.MatchmakerPort,
+        "--PublicIp",
+        config.Address,
+        "--HttpPort",
+        httpPort,
+        "--StreamerPort",
+        streamerPort,
+        "--SFUPort",
+        SFUPort,
+    ]
+
+    console.log('cmd:',cmdArr.join(" "))
+    execCommand(cmdArr.join(" "))
+}
+
+function runStreamer(httpPort,streamPort) {
+    cmdArr = [
+        config.StreamerRunPath,
+        "-PixelStreamingURL=ws://127.0.0.1:"+streamPort,
+        "-RenderOffScreen -WINDOWED -ResX=1920 -ResY=1080 -log",
+    ]
+
+    console.log('cmd:',cmdArr.join(" "))
+    streamerProcess = execCommand(cmdArr.join(" "))
+
+    if (!streamerProcess) return
+
+    streamerProcess.on('exit',(code)=>{
+        if (childProcessMap.delete(httpPort)) {
+            console.log('delete error ok')
+        }
+        console.log('streamer process exit, code ', code,"httpPort ", httpPort)
+    })
+
+    childProcessMap.set(httpPort, streamerProcess)
+}
+
+function execCommand(cmd) {
+    return exec(cmd, {} , function(err, stdout, stderr){
+        if (err) {
+            console.error(err);
+        } else if (stderr.length > 0) {
+            console.error(stderr.toString());
+        } else {
+            console.log("stdout:",stdout);
+        }
+    })
+}
+
 const matchmaker = net.createServer((connection) => {
 	connection.on('data', (data) => {
 		try {
 			message = JSON.parse(data);
 
-			if(message)
-				console.log(`Message TYPE: ${message.type}`);
+			if(message) console.log(`Message TYPE: ${message.type}`);
 		} catch(e) {
 			console.log(`ERROR (${e.toString()}): Failed to parse Cirrus information from data: ${data.toString()}`);
 			disconnect(connection);
@@ -286,5 +496,10 @@ const matchmaker = net.createServer((connection) => {
 });
 
 matchmaker.listen(config.MatchmakerPort, () => {
+    // controller()
+    setInterval(function(){
+        controller()
+    }, config.ControllerInterval)
+
 	console.log('Matchmaker listening on *:' + config.MatchmakerPort);
 });
