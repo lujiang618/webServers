@@ -9,3 +9,11 @@ node matchmaker.js --HttpPort 2080 --MatchmakerPort 2081 --Address 127.0.0.1 --C
 
 
 ```
+
+启动SS时，判断turnserver是否运行
+```
+$isCoturnRuning=(Get-Process -Name turnserver | Select-Object).Id
+if(!$isCoturnRuning) {
+    & "$PSScriptRoot\Start_AWS_TURNServer.ps1"
+}
+```
