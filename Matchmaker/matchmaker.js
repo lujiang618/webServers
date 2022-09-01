@@ -13,12 +13,17 @@ const defaultConfig = {
 	LogToFile: true,
     inited: false,
 
+    ControllerInterval: 1000*60,
     StandbyNum: 1,
     InitSSNum: 1,
+    StartPort: 7000,
+    EndPort: 7099,
+
     Address: "192.168.99.145",
-    ControllerInterval: 1000*60,
+
     StreamerRunPath: "../../../../UDxyLauncher.sh",
     CirrusRunPath: "./start.sh",
+
     ResX: 1920,
     ResY: 1080,
 };
@@ -83,6 +88,12 @@ if (typeof argv.ResX != 'undefined') {
 }
 if (typeof argv.ResY != 'undefined') {
 	config.ResY = argv.ResY;
+}
+if (typeof argv.StartPort != 'undefined') {
+	config.StartPort = argv.StartPort;
+}
+if (typeof argv.EndPort != 'undefined') {
+	config.EndPort = argv.EndPort;
 }
 
 http.listen(config.HttpPort, () => {
@@ -244,7 +255,7 @@ function disconnect(connection) {
 	connection.end();
 }
 
-let maxPort = 7001
+
 function controller() {
     console.log("controller start.......................")
 
@@ -326,12 +337,12 @@ function add(num) {
 	if (addNum === num) return
 
     // 单机不能无限制的启动，最多 99/3 = 33 个服务器
-    if ( maxPort > 7099) return
+    if ( config.StartPort > config.EndPort) return
 
     for (let i=addNum; i<num; i++) {
-        const currentHttpPort =  maxPort++
-        const currentStreamerPort =  maxPort++
-        const currentSFUPort =  maxPort++
+        const currentHttpPort =  config.StartPort++
+        const currentStreamerPort =  config.StartPort++
+        const currentSFUPort =  config.StartPort++
 
         runCirrus(currentHttpPort, currentStreamerPort, currentSFUPort)
         runStreamer(currentHttpPort, currentStreamerPort)

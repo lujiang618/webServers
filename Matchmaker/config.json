@@ -2,5 +2,16 @@
 	"HttpPort": 2080,
 	"UseHTTPS": false,
 	"MatchmakerPort": 2081,
-	"LogToFile": true
+	"LogToFile": true,
+	"inited": false,
+	"ControllerInterval": 60000,
+	"StandbyNum": 1,
+	"InitSSNum": 1,
+	"StartPort": 7000,
+	"EndPort": 7099,
+	"Address": "192.168.99.145",
+	"StreamerRunPath": "",
+	"CirrusRunPath": "",
+	"ResX": 1920,
+	"ResY": 1080
 }
