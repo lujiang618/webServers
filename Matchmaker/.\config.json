@@ -2,5 +2,14 @@
 	"HttpPort": 2080,
 	"UseHTTPS": false,
 	"MatchmakerPort": 2081,
-	"LogToFile": true
+	"LogToFile": true,
+	"inited": false,
+	"StandbyNum": 1,
+	"InitSSNum": 1,
+	"Address": "192.168.99.145",
+	"ControllerInterval": 60000,
+	"StreamerRunPath": "../../../../UDxyLauncher.sh",
+	"CirrusRunPath": "./start.sh",
+	"ResX": 1920,
+	"ResY": 1080
 }

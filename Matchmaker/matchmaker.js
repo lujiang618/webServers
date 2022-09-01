@@ -18,7 +18,9 @@ const defaultConfig = {
     Address: "192.168.99.145",
     ControllerInterval: 1000*60,
     StreamerRunPath: "../../../../UDxyLauncher.sh",
-    CirrusRunPath: "./start.sh"
+    CirrusRunPath: "./start.sh",
+    ResX: 1920,
+    ResY: 1080,
 };
 
 var childProcessMap = new Map()
@@ -75,6 +77,12 @@ if (typeof argv.StreamerRunPath != 'undefined') {
 }
 if (typeof argv.CirrusRunPath != 'undefined') {
 	config.CirrusRunPath = argv.CirrusRunPath;
+}
+if (typeof argv.ResX != 'undefined') {
+	config.ResX = argv.ResX;
+}
+if (typeof argv.ResY != 'undefined') {
+	config.ResY = argv.ResY;
 }
 
 http.listen(config.HttpPort, () => {
@@ -355,7 +363,8 @@ function runStreamer(httpPort,streamPort) {
     cmdArr = [
         config.StreamerRunPath,
         "-PixelStreamingURL=ws://127.0.0.1:"+streamPort,
-        "-RenderOffScreen -WINDOWED -ResX=1920 -ResY=1080 -log",
+        "-RenderOffScreen -WINDOWED",
+        "-ResX="+config.ResX+" -ResY="+config.ResY+" -log",
     ]
 
     console.log('cmd:',cmdArr.join(" "))
