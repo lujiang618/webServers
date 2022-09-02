@@ -4,25 +4,25 @@ var enableRESTAPI = true;
 
 const defaultConfig = {
 	// The port clients connect to the matchmaking service over HTTP
-	HttpPort: 2080,
+	HttpPort: 90,
 	UseHTTPS: false,
 	// The matchmaking port the signaling service connects to the matchmaker
-	MatchmakerPort: 2081,
+	MatchmakerPort: 9999,
 
 	// Log to file
 	LogToFile: true,
     inited: false,
 
     ControllerInterval: 1000*60,
-    StandbyNum: 1,
-    InitSSNum: 1,
+    StandbyNum: 2,
+    InitSSNum: 3,
     StartPort: 7000,
     EndPort: 7099,
 
-    Address: "192.168.99.145",
+    Address: "",
 
-    StreamerRunPath: "../../../../UDxyLauncher.sh",
-    CirrusRunPath: "./start.sh",
+    StreamerRunPath: "",
+    CirrusRunPath: "",
 
     ResX: 1920,
     ResY: 1080,
@@ -96,6 +96,11 @@ if (typeof argv.EndPort != 'undefined') {
 	config.EndPort = argv.EndPort;
 }
 
+if (!config.StreamerRunPath || !config.CirrusRunPath || !config.Address) {
+    console.error("缺少必要的启动参数");
+    throw new Error("缺少必要的启动参数")
+}
+
 http.listen(config.HttpPort, () => {
     console.log('HTTP listening on *:' + config.HttpPort);
 });
@@ -137,7 +142,7 @@ if (config.UseHTTPS) {
 // No servers are available so send some simple JavaScript to the client to make
 // it retry after a short period of time.
 function sendRetryResponse(res) {
-	res.send(`All ${cirrusServers.size} Cirrus servers are in use. Retrying in <span id="countdown">2</span> seconds.
+	res.send(`All ${cirrusServers.size} Cirrus servers are in use. Retrying in <span id="countdown">3</span> seconds.
 	<script>
 		var countdown = document.getElementById("countdown").textContent;
 		setInterval(function() {
@@ -156,10 +161,11 @@ function getAvailableCirrusServer() {
 	for (cirrusServer of cirrusServers.values()) {
 		if (cirrusServer.numConnectedClients === 0 && cirrusServer.ready === true) {
 
-			// Check if we had at least 45 seconds since the last redirect, avoiding the
+			// Check if we had at least 10 seconds since the last redirect, avoiding the
 			// chance of redirecting 2+ users to the same SS before they click Play.
-			if( cirrusServer.lastRedirect ) {
-				if( ((Date.now() - cirrusServer.lastRedirect) / 1000) < 45 )
+			// In other words, give the user 10 seconds to click play button the claim the server.
+			if( cirrusServer.hasOwnProperty('lastRedirect')) {
+				if( ((Date.now() - cirrusServer.lastRedirect) / 1000) < 10 )
 					continue;
 			}
 			cirrusServer.lastRedirect = Date.now();
@@ -228,6 +234,7 @@ if(enableRedirectionLinks) {
 			//console.log(req);
 			console.log(`Redirect to ${cirrusServer.address}:${cirrusServer.port}`);
 		} else {
+            addServer(getAddNum(availableCount))
 			sendRetryResponse(res);
 		}
 	});
@@ -264,8 +271,8 @@ function controller() {
     console.log("serverCount", cirrusServers.size)
     console.log("availableCount",availableCount)
 
-    add(getAddNum(availableCount))
-    reduce(getReduceNum(availableCount))
+    addServer(getAddNum(availableCount))
+    reduceServer(getReduceNum(availableCount))
 
     if (!config.inited) config.inited = true
 }
@@ -300,7 +307,7 @@ function getReduceNum(availableCount) {
 
 // 只关streamer不关闭signalling
 // TODO: 不应该频繁的kill 进程
-function reduce(num) {
+function reduceServer(num) {
     console.log("reduce number ",num)
     if (num == 0) return
 
@@ -319,7 +326,7 @@ function reduce(num) {
 	}
 }
 
-function add(num) {
+function addServer(num) {
     console.log("add number ",num)
     if (num == 0) return
 
@@ -487,6 +494,10 @@ const matchmaker = net.createServer((connection) => {
 			if(cirrusServer) {
 				cirrusServer.numConnectedClients--;
 				console.log(`Client disconnected from Cirrus server ${cirrusServer.address}:${cirrusServer.port}`);
+				if(cirrusServer.numConnectedClients === 0) {
+					// this make this server immediately available for a new client
+					cirrusServer.lastRedirect = 0;
+				}
 			} else {
 				disconnect(connection);
 			}
