@@ -11,11 +11,9 @@ const defaultConfig = {
 
 	// Log to file
 	LogToFile: true,
-    inited: false,
 
     ControllerInterval: 1000*60,
-    StandbyNum: 2,
-    InitSSNum: 3,
+    MinAvailableServer: 2,
     StartPort: 7000,
     EndPort: 7099,
 
@@ -65,11 +63,8 @@ if (typeof argv.HttpPort != 'undefined') {
 if (typeof argv.MatchmakerPort != 'undefined') {
 	config.MatchmakerPort = argv.MatchmakerPort;
 }
-if (typeof argv.StandbyNum != 'undefined') {
-	config.StandbyNum = argv.StandbyNum;
-}
-if (typeof argv.InitSSNum != 'undefined') {
-	config.InitSSNum = argv.InitSSNum;
+if (typeof argv.MinAvailableServer != 'undefined') {
+	config.MinAvailableServer = argv.MinAvailableServer > 1 ? argv.MinAvailableServer : 1; // 最少要启动1个server
 }
 if (typeof argv.Address != 'undefined') {
 	config.Address = argv.Address;
@@ -100,6 +95,53 @@ if (!config.StreamerRunPath || !config.CirrusRunPath || !config.Address) {
     console.error("缺少必要的启动参数");
     throw new Error("缺少必要的启动参数")
 }
+
+
+const url = require("url");
+const httpWs = require("http");
+
+http.on("upgrade", function (req, client, head) {
+  const { pathname } = url.parse(req.url);
+    const pathArr = pathname.split('/')
+    const headers = _getProxyHeader(req.headers) //将客户端的websocket头和一些信息转发到真正的处理服务器上
+    headers.hostname = 'localhost'//目标服务器
+    headers.path = '/' //目标路径
+    headers.port = pathArr[2]
+    const proxy = httpWs.request(headers) //https可用https，headers中加入rejectUnauthorized=false忽略证书验证
+    proxy.on('upgrade', (res, socket, head) => {
+      client.write(_formatProxyResponse(res))//使用目标服务器头信息响应客户端
+      client.pipe(socket)
+      socket.pipe(client)
+    })
+    proxy.on('error', (error) => {
+      client.write("Sorry, cant't connect to this container ")
+      return
+    })
+    proxy.end()
+    function _getProxyHeader(headers) {
+      const keys = Object.getOwnPropertyNames(headers)
+      const proxyHeader = { headers: {} }
+      keys.forEach(key => {
+        if (key.indexOf('sec') >= 0 || key === 'upgrade' || key === 'connection') {
+          proxyHeader.headers[key] = headers[key]
+          return
+        }
+        proxyHeader[key] = headers[key]
+      })
+      return proxyHeader
+    }
+    function _formatProxyResponse(res) {
+      const headers = res.headers
+      const keys = Object.getOwnPropertyNames(headers)
+      let switchLine = '\r\n';
+      let response = [`HTTP/${res.httpVersion} ${res.statusCode} ${res.statusMessage}${switchLine}`]
+      keys.forEach(key => {
+        response.push(`${key}: ${headers[key]}${switchLine}`)
+      })
+      response.push(switchLine)
+      return response.join('')
+    }
+});
 
 http.listen(config.HttpPort, () => {
     console.log('HTTP listening on *:' + config.HttpPort);
@@ -225,16 +267,56 @@ if(enableRESTAPI) {
 	});
 }
 
+const proxy = require('express-http-proxy')
+
+app.use(
+    '/proxy/:port',
+    proxy( (req)=>{
+        return selectProxyHost(req.params.port)
+    })
+)
+
+app.use(
+    '/proxy/images',
+    proxy('http://127.0.0.1:7001/images')
+)
+
+app.use(
+    '/proxy/:port/',
+    proxy('http://127.0.0.1:'+(parseInt(config.StartPort)+1),{
+        proxyReqPathResolver: function(request) {
+            return request.url
+        }
+    })
+)
+
+// app.use(
+//     '/proxy/scripts',
+//     proxy('http://127.0.0.1:7001', {
+//         proxyReqPathResolver: function(request) {
+//             return request.baseUrl+request.url
+//         }
+//     })
+// )
+
+
+function selectProxyHost(port){
+    console.log("port----------------",port)
+    // const port = '7001'
+    return `http://127.0.0.1:${port}/`;
+}
+
 if(enableRedirectionLinks) {
 	// Handle standard URL.
 	app.get('/', (req, res) => {
 		cirrusServer = getAvailableCirrusServer();
 		if (cirrusServer != undefined) {
-			res.redirect(`http://${cirrusServer.address}:${cirrusServer.port}/`);
+            redirectUrl = `http://127.0.0.1:${config.HttpPort}/proxy/${cirrusServer.port}/`
+			res.redirect(redirectUrl);
 			//console.log(req);
 			console.log(`Redirect to ${cirrusServer.address}:${cirrusServer.port}`);
 		} else {
-            addServer(getAddNum(availableCount))
+            addServer(getAddNum(getAvailableCirrusServerCount()))
 			sendRetryResponse(res);
 		}
 	});
@@ -273,36 +355,32 @@ function controller() {
 
     addServer(getAddNum(availableCount))
     reduceServer(getReduceNum(availableCount))
-
-    if (!config.inited) config.inited = true
 }
 
 function getAddNum(availableCount) {
     const serverCount = cirrusServers.size
     if (serverCount>30) return 0
 
-    if (!config.inited)  return config.InitSSNum
-
     const childProcessCount = childProcessMap.size
     const readyCount = getReadyCirrusServerCount()
 
-    if (childProcessCount-readyCount >= config.StandbyNum) return 0  // 启动中streamer数量 >= 备用数量时 不在启动新的streamer
+    if (childProcessCount-readyCount >= config.MinAvailableServer) return 0  // 启动中streamer数量 >= 备用数量时 不在启动新的streamer
 
-    if (availableCount >= config.StandbyNum) return 0
+    if (availableCount >= config.MinAvailableServer) return 0
 
-    return config.StandbyNum - availableCount
+    return config.MinAvailableServer - availableCount
 }
 
 function getReduceNum(availableCount) {
     const serverCount = cirrusServers.size
-    if (serverCount < config.InitSSNum) return 0
+    if (serverCount < config.MinAvailableServer) return 0
 
     const readyCount = getReadyCirrusServerCount()
-    if (readyCount <= config.InitSSNum) return 0
+    if (readyCount <= config.MinAvailableServer) return 0
 
-    if (availableCount <= config.StandbyNum) return 0
+    if (availableCount <= config.MinAvailableServer) return 0
 
-    return availableCount - config.StandbyNum
+    return availableCount - config.MinAvailableServer
 }
 
 // 只关streamer不关闭signalling
@@ -381,7 +459,7 @@ function runStreamer(httpPort,streamPort) {
     cmdArr = [
         config.StreamerRunPath,
         "-PixelStreamingURL=ws://127.0.0.1:"+streamPort,
-        "-RenderOffScreen -WINDOWED",
+        "-AudioMixer -RenderOffScreen -WINDOWED",
         "-ResX="+config.ResX+" -ResY="+config.ResY+" -log",
     ]
 

@@ -294,7 +294,7 @@ function setupHtmlEvents() {
     setupToggleWithUrlParams("prefer-sfu-tgl", "preferSFU");
     setupToggleWithUrlParams("use-mic-tgl", "useMic");
     setupToggleWithUrlParams("force-turn-tgl", "ForceTURN");
- 
+
     var streamSelector = document.getElementById('stream-select');
     var trackSelector = document.getElementById('track-select');
     if (streamSelector) {
@@ -585,6 +585,7 @@ const ToClientMessageType = {
 let VideoEncoderQP = "N/A";
 
 function setupWebRtcPlayer(htmlElement, config) {
+    if (webRtcPlayer) return webRtcPlayer
     webRtcPlayerObj = new webRtcPlayer(config);
     htmlElement.appendChild(webRtcPlayerObj.video);
     htmlElement.appendChild(freezeFrameOverlay);
@@ -652,7 +653,7 @@ function setupWebRtcPlayer(htmlElement, config) {
         };
     }
 
-    
+
 
     function processFileExtension(view) {
         // Reset file if we got a file message and we are not "receiving" it yet
@@ -665,7 +666,7 @@ function setupWebRtcPlayer(htmlElement, config) {
             file.size = 0;
             file.data = [];
             file.timestampStart = (new Date()).getTime();
-            console.log('Received first chunk of file'); 
+            console.log('Received first chunk of file');
         }
 
         let extensionAsString = new TextDecoder("utf-16").decode(view.slice(1));
@@ -684,7 +685,7 @@ function setupWebRtcPlayer(htmlElement, config) {
             file.size = 0;
             file.data = [];
             file.timestampStart = (new Date()).getTime();
-            console.log('Received first chunk of file'); 
+            console.log('Received first chunk of file');
         }
 
         let mimeAsString = new TextDecoder("utf-16").decode(view.slice(1));
@@ -699,13 +700,13 @@ function setupWebRtcPlayer(htmlElement, config) {
 
         // Extract the toal size of the file (across all chunks)
         file.size = Math.ceil((new DataView(view.slice(1, 5).buffer)).getInt32(0, true) / 16379 /* The maximum number of payload bits per message*/);
-        
+
         // Get the file part of the payload
         let fileBytes = view.slice(1 + 4);
 
         // Append to existing data that holds the file
         file.data.push(fileBytes);
-        
+
         // Uncomment for debug
         console.log(`Received file chunk: ${ file.data.length }/${ file.size }`);
 
@@ -721,7 +722,7 @@ function setupWebRtcPlayer(htmlElement, config) {
             // File reconstruction
             /**
              * Example code to reconstruct the file
-             * 
+             *
              * This code reconstructs the received data into the original file based on the mime type and extension provided and then downloads the reconstructed file
              */
             var received = new Blob(file.data, { type: file.mimetype })
@@ -732,7 +733,7 @@ function setupWebRtcPlayer(htmlElement, config) {
             aj.appendTo('body');
             // aj[0].click();
             aj.remove();
-        } 
+        }
         else if(file.data.length > file.size)
         {
             file.receiving = false;
@@ -857,7 +858,7 @@ function setupWebRtcPlayer(htmlElement, config) {
                         warningElem1.id = "warning-elem-webrtc";
                         document.getElementById("webRTCSettingsHeader").appendChild(warningElem1);
                     }
-                    
+
                     if(!document.getElementById("warning-elem-encoder")) {
                         let warningElem2 = document.createElement("p");
                         warningElem2.innerText = "(Disabled by -AllowPixelStreamingCommands=false)";
@@ -1186,7 +1187,7 @@ function invalidateFreezeFrameOverlay() {
     freezeFrameOverlay.style.display = 'none';
     freezeFrame.valid = false;
     freezeFrameOverlay.classList.remove("freezeframeBackground");
-    
+
     if (webRtcPlayerObj) {
         webRtcPlayerObj.setVideoEnabled(true);
     }
@@ -1870,7 +1871,7 @@ function registerTouchEvents(playerElement) {
             data.setUint8(byte, coord.inRange ? 1 : 0, true); // mark the touch as in the player or not
             byte += 1;
         }
-        
+
         sendInputData(data.buffer);
     }
 

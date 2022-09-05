@@ -152,6 +152,13 @@
     "object-assign" "^4"
     "vary" "^1"
 
+"debug@^3.0.1":
+  "integrity" "sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ=="
+  "resolved" "https://registry.npmjs.org/debug/-/debug-3.2.7.tgz"
+  "version" "3.2.7"
+  dependencies:
+    "ms" "^2.1.1"
+
 "debug@~3.1.0":
   "integrity" "sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g=="
   "resolved" "https://registry.npmjs.org/debug/-/debug-3.1.0.tgz"
@@ -243,6 +250,11 @@
     "engine.io-parser" "~2.2.0"
     "ws" "~7.4.2"
 
+"es6-promise@^4.1.1":
+  "integrity" "sha512-HJDGx5daxeIvxdBxvG2cb9g4tEvwIk3i8+nhX0yGrYmZUzbkdg8QbDevheDB8gd0//uPj4c1EQua8Q+MViT0/w=="
+  "resolved" "https://registry.npmjs.org/es6-promise/-/es6-promise-4.2.8.tgz"
+  "version" "4.2.8"
+
 "escalade@^3.1.1":
   "integrity" "sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw=="
   "resolved" "https://registry.npmjs.org/escalade/-/escalade-3.1.1.tgz"
@@ -257,6 +269,15 @@
   "integrity" "sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc="
   "resolved" "https://registry.npmjs.org/etag/-/etag-1.8.1.tgz"
   "version" "1.8.1"
+
+"express-http-proxy@^1.6.3":
+  "integrity" "sha512-/l77JHcOUrDUX8V67E287VEUQT0lbm71gdGVoodnlWBziarYKgMcpqT7xvh/HM8Jv52phw8Bd8tY+a7QjOr7Yg=="
+  "resolved" "https://registry.npmjs.org/express-http-proxy/-/express-http-proxy-1.6.3.tgz"
+  "version" "1.6.3"
+  dependencies:
+    "debug" "^3.0.1"
+    "es6-promise" "^4.1.1"
+    "raw-body" "^2.3.0"
 
 "express@^4.16.2":
   "integrity" "sha1-avilAjUNsyRuzEvs9rWjTSL37VM="
@@ -481,7 +502,7 @@
   "resolved" "https://registry.npmjs.org/range-parser/-/range-parser-1.2.0.tgz"
   "version" "1.2.0"
 
-"raw-body@2.3.2":
+"raw-body@^2.3.0", "raw-body@2.3.2":
   "integrity" "sha1-vNYMd9Prk83gBQKVw/N5OJvIj4k="
   "resolved" "https://registry.npmjs.org/raw-body/-/raw-body-2.3.2.tgz"
   "version" "2.3.2"
