@@ -44,6 +44,10 @@ const fs = require('fs');
 const path = require('path');
 const logging = require('./modules/logging.js');
 const { exec } = require('child_process');
+const url = require("url");
+const httpWs = require("http");
+const defaultAddress = '127.0.0.1'
+
 logging.RegisterConsoleLogger();
 
 if (config.LogToFile) {
@@ -95,53 +99,6 @@ if (!config.StreamerRunPath || !config.CirrusRunPath || !config.Address) {
     console.error("缺少必要的启动参数");
     throw new Error("缺少必要的启动参数")
 }
-
-
-const url = require("url");
-const httpWs = require("http");
-
-http.on("upgrade", function (req, client, head) {
-  const { pathname } = url.parse(req.url);
-    const pathArr = pathname.split('/')
-    const headers = _getProxyHeader(req.headers) //将客户端的websocket头和一些信息转发到真正的处理服务器上
-    headers.hostname = 'localhost'//目标服务器
-    headers.path = '/' //目标路径
-    headers.port = pathArr[2]
-    const proxy = httpWs.request(headers) //https可用https，headers中加入rejectUnauthorized=false忽略证书验证
-    proxy.on('upgrade', (res, socket, head) => {
-      client.write(_formatProxyResponse(res))//使用目标服务器头信息响应客户端
-      client.pipe(socket)
-      socket.pipe(client)
-    })
-    proxy.on('error', (error) => {
-      client.write("Sorry, cant't connect to this container ")
-      return
-    })
-    proxy.end()
-    function _getProxyHeader(headers) {
-      const keys = Object.getOwnPropertyNames(headers)
-      const proxyHeader = { headers: {} }
-      keys.forEach(key => {
-        if (key.indexOf('sec') >= 0 || key === 'upgrade' || key === 'connection') {
-          proxyHeader.headers[key] = headers[key]
-          return
-        }
-        proxyHeader[key] = headers[key]
-      })
-      return proxyHeader
-    }
-    function _formatProxyResponse(res) {
-      const headers = res.headers
-      const keys = Object.getOwnPropertyNames(headers)
-      let switchLine = '\r\n';
-      let response = [`HTTP/${res.httpVersion} ${res.statusCode} ${res.statusMessage}${switchLine}`]
-      keys.forEach(key => {
-        response.push(`${key}: ${headers[key]}${switchLine}`)
-      })
-      response.push(switchLine)
-      return response.join('')
-    }
-});
 
 http.listen(config.HttpPort, () => {
     console.log('HTTP listening on *:' + config.HttpPort);
@@ -253,6 +210,52 @@ function getReadyCirrusServerCount() {
     return readyCount
 }
 
+
+
+http.on("upgrade", function (req, client, head) {
+    const { pathname } = url.parse(req.url);
+        const pathArr = pathname.split('/')
+        const headers = _getProxyHeader(req.headers) //将客户端的websocket头和一些信息转发到真正的处理服务器上
+        headers.hostname = 'localhost'//目标服务器
+        headers.path = '/' //目标路径
+        headers.port = pathArr[2]
+        const proxy = httpWs.request(headers) //https可用https，headers中加入rejectUnauthorized=false忽略证书验证
+        proxy.on('upgrade', (res, socket, head) => {
+            client.write(_formatProxyResponse(res))//使用目标服务器头信息响应客户端
+            client.pipe(socket)
+            socket.pipe(client)
+        })
+        proxy.on('error', (error) => {
+            client.write("Sorry, cant't connect to this container ")
+            return
+        })
+        proxy.end()
+
+        function _getProxyHeader(headers) {
+            const keys = Object.getOwnPropertyNames(headers)
+            const proxyHeader = { headers: {} }
+            keys.forEach(key => {
+                if (key.indexOf('sec') >= 0 || key === 'upgrade' || key === 'connection') {
+                proxyHeader.headers[key] = headers[key]
+                return
+                }
+                proxyHeader[key] = headers[key]
+            })
+            return proxyHeader
+        }
+        function _formatProxyResponse(res) {
+            const headers = res.headers
+            const keys = Object.getOwnPropertyNames(headers)
+            let switchLine = '\r\n';
+            let response = [`HTTP/${res.httpVersion} ${res.statusCode} ${res.statusMessage}${switchLine}`]
+            keys.forEach(key => {
+                response.push(`${key}: ${headers[key]}${switchLine}`)
+            })
+            response.push(switchLine)
+            return response.join('')
+        }
+});
+
 if(enableRESTAPI) {
 	// Handle REST signalling server only request.
 	app.options('/signallingserver', cors())
@@ -270,40 +273,16 @@ if(enableRESTAPI) {
 const proxy = require('express-http-proxy')
 
 app.use(
-    '/proxy/:port',
-    proxy( (req)=>{
-        return selectProxyHost(req.params.port)
-    })
-)
-
-app.use(
-    '/proxy/images',
-    proxy('http://127.0.0.1:7001/images')
-)
-
-app.use(
     '/proxy/:port/',
-    proxy('http://127.0.0.1:'+(parseInt(config.StartPort)+1),{
+    proxy((req)=>{return selectProxyHost(req.params.port)}, {
         proxyReqPathResolver: function(request) {
             return request.url
         }
     })
 )
 
-// app.use(
-//     '/proxy/scripts',
-//     proxy('http://127.0.0.1:7001', {
-//         proxyReqPathResolver: function(request) {
-//             return request.baseUrl+request.url
-//         }
-//     })
-// )
-
-
 function selectProxyHost(port){
-    console.log("port----------------",port)
-    // const port = '7001'
-    return `http://127.0.0.1:${port}/`;
+    return `http://${defaultAddress}:${port}/`;
 }
 
 if(enableRedirectionLinks) {
@@ -311,10 +290,9 @@ if(enableRedirectionLinks) {
 	app.get('/', (req, res) => {
 		cirrusServer = getAvailableCirrusServer();
 		if (cirrusServer != undefined) {
-            redirectUrl = `http://127.0.0.1:${config.HttpPort}/proxy/${cirrusServer.port}/`
+            redirectUrl = `http://${config.Address}:${config.HttpPort}/proxy/${cirrusServer.port}/`
 			res.redirect(redirectUrl);
-			//console.log(req);
-			console.log(`Redirect to ${cirrusServer.address}:${cirrusServer.port}`);
+			console.log(`Redirect to ${redirectUrl}`);
 		} else {
             addServer(getAddNum(getAvailableCirrusServerCount()))
 			sendRetryResponse(res);
@@ -438,7 +416,7 @@ function runCirrus(httpPort, streamerPort, SFUPort) {
     let cmdArr = [
         config.CirrusRunPath,
         "--UseMatchmaker --matchmakerAddress",
-        config.Address,
+        defaultAddress,
         "--matchmakerPort",
         config.MatchmakerPort,
         "--PublicIp",
@@ -458,7 +436,7 @@ function runCirrus(httpPort, streamerPort, SFUPort) {
 function runStreamer(httpPort,streamPort) {
     cmdArr = [
         config.StreamerRunPath,
-        "-PixelStreamingURL=ws://127.0.0.1:"+streamPort,
+        "-PixelStreamingURL=ws://"+defaultAddress+":"+streamPort,
         "-AudioMixer -RenderOffScreen -WINDOWED",
         "-ResX="+config.ResX+" -ResY="+config.ResY+" -log",
     ]
