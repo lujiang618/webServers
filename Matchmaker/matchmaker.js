@@ -1,5 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-var enableRedirectionLinks = true;
+var enableRedirectionLinks = false;
 var enableRESTAPI = true;
 
 const defaultConfig = {
@@ -12,21 +12,27 @@ const defaultConfig = {
 	// Log to file
 	LogToFile: true,
 
-    ControllerInterval: 1000*60,
+    ControllerInterval: 60,
     MinAvailableServer: 2,
     StartPort: 7000,
-    EndPort: 7099,
+    EndPort: 7018,
 
     Address: "",
 
     StreamerRunPath: "",
     CirrusRunPath: "",
 
+    UeUdpSenderPortStart: 19032,
+    UeUdpRecievePortStart: 6060,
+    UeConfigIniPath: "",
+
     ResX: 1920,
     ResY: 1080,
 };
 
 var childProcessMap = new Map()
+var udpPorts = new Map();
+var startStreamerTimerMap = new Map();
 
 // Similar to the Signaling Server (SS) code, load in a config.json file for the MM parameters
 const argv = require('yargs').argv;
@@ -44,9 +50,33 @@ const fs = require('fs');
 const path = require('path');
 const logging = require('./modules/logging.js');
 const { exec } = require('child_process');
-const url = require("url");
-const httpWs = require("http");
 const defaultAddress = '127.0.0.1'
+const kill = require('tree-kill');
+// const redis = require('./db/redis')
+// const redisDevOptions = require('./config/redis.dev')
+// const redisTestOptions = require('./config/redis.test')
+// const redisDemoOptions = require('./config/redis.demo')
+
+// const redisDev = redis.createClient(redisDevOptions.host,redisDevOptions.port,redisDevOptions.password,redisDevOptions.db)
+// const redisTest = redis.createClient(redisTestOptions.host,redisTestOptions.port,redisTestOptions.password,redisTestOptions.db)
+// const redisDemo = redis.createClient(redisDemoOptions.host,redisDemoOptions.port,redisDemoOptions.password,redisDemoOptions.db)
+// const redisUdpPortKey = 'cpic:ue:udp:port'
+
+// function resetRedis() {
+//     redisDev.del(redisUdpPortKey)
+//     redisTest.del(redisUdpPortKey)
+//     redisDemo.del(redisUdpPortKey)
+// }
+
+// function updateRedis(httpPort, udpPort) {
+//     redisDev.hSet(redisUdpPortKey,httpPort, JSON.stringify(udpPort))
+//     redisTest.hSet(redisUdpPortKey,httpPort, JSON.stringify(udpPort))
+//     redisDemo.hSet(redisUdpPortKey,httpPort, JSON.stringify(udpPort))
+// }
+
+
+// 启动时，清空ue udp prot
+// resetRedis()
 
 logging.RegisterConsoleLogger();
 
@@ -82,6 +112,15 @@ if (typeof argv.StreamerRunPath != 'undefined') {
 if (typeof argv.CirrusRunPath != 'undefined') {
 	config.CirrusRunPath = argv.CirrusRunPath;
 }
+if (typeof argv.UeConfigIniPath != 'undefined') {
+	config.UeConfigIniPath = argv.UeConfigIniPath;
+}
+if (typeof argv.UeUdpSenderPortStart != 'undefined') {
+	config.UeUdpSenderPortStart = argv.UeUdpSenderPortStart;
+}
+if (typeof argv.UeUdpRecievePortStart != 'undefined') {
+	config.UeUdpRecievePortStart = argv.UeUdpRecievePortStart;
+}
 if (typeof argv.ResX != 'undefined') {
 	config.ResX = argv.ResX;
 }
@@ -95,7 +134,7 @@ if (typeof argv.EndPort != 'undefined') {
 	config.EndPort = argv.EndPort;
 }
 
-if (!config.StreamerRunPath || !config.CirrusRunPath || !config.Address) {
+if (!config.StreamerRunPath || !config.CirrusRunPath || !config.Address || !config.UeConfigIniPath) {
     console.error("缺少必要的启动参数");
     throw new Error("缺少必要的启动参数")
 }
@@ -182,15 +221,6 @@ function getAvailableCirrusServerCount() {
 
     for (cirrusServer of cirrusServers.values()) {
 		if (cirrusServer.numConnectedClients === 0 && cirrusServer.ready === true) {
-
-			// Check if we had at least 45 seconds since the last redirect, avoiding the
-			// chance of redirecting 2+ users to the same SS before they click Play.
-			if( cirrusServer.lastRedirect ) {
-				if( ((Date.now() - cirrusServer.lastRedirect) / 1000) < 45 )
-					continue;
-			}
-			cirrusServer.lastRedirect = Date.now();
-
 			availableCount++
 		}
 	}
@@ -200,7 +230,6 @@ function getAvailableCirrusServerCount() {
 
 function getReadyCirrusServerCount() {
     let readyCount = 0
-
     for (cirrusServer of cirrusServers.values()) {
 		if (cirrusServer.ready === true) {
 			readyCount++
@@ -210,51 +239,7 @@ function getReadyCirrusServerCount() {
     return readyCount
 }
 
-
-
-http.on("upgrade", function (req, client, head) {
-    const { pathname } = url.parse(req.url);
-        const pathArr = pathname.split('/')
-        const headers = _getProxyHeader(req.headers) //将客户端的websocket头和一些信息转发到真正的处理服务器上
-        headers.hostname = 'localhost'//目标服务器
-        headers.path = '/' //目标路径
-        headers.port = pathArr[2]
-        const proxy = httpWs.request(headers) //https可用https，headers中加入rejectUnauthorized=false忽略证书验证
-        proxy.on('upgrade', (res, socket, head) => {
-            client.write(_formatProxyResponse(res))//使用目标服务器头信息响应客户端
-            client.pipe(socket)
-            socket.pipe(client)
-        })
-        proxy.on('error', (error) => {
-            client.write("Sorry, cant't connect to this container ")
-            return
-        })
-        proxy.end()
-
-        function _getProxyHeader(headers) {
-            const keys = Object.getOwnPropertyNames(headers)
-            const proxyHeader = { headers: {} }
-            keys.forEach(key => {
-                if (key.indexOf('sec') >= 0 || key === 'upgrade' || key === 'connection') {
-                proxyHeader.headers[key] = headers[key]
-                return
-                }
-                proxyHeader[key] = headers[key]
-            })
-            return proxyHeader
-        }
-        function _formatProxyResponse(res) {
-            const headers = res.headers
-            const keys = Object.getOwnPropertyNames(headers)
-            let switchLine = '\r\n';
-            let response = [`HTTP/${res.httpVersion} ${res.statusCode} ${res.statusMessage}${switchLine}`]
-            keys.forEach(key => {
-                response.push(`${key}: ${headers[key]}${switchLine}`)
-            })
-            response.push(switchLine)
-            return response.join('')
-        }
-});
+app.use('/images', express.static(path.join(__dirname, './images')))
 
 if(enableRESTAPI) {
 	// Handle REST signalling server only request.
@@ -266,23 +251,9 @@ if(enableRESTAPI) {
 			console.log(`Returning ${cirrusServer.address}:${cirrusServer.port}`);
 		} else {
 			res.json({ signallingServer: '', error: 'No signalling servers available'});
+            addServer(getAddNum(getAvailableCirrusServerCount()));
 		}
 	});
-}
-
-const proxy = require('express-http-proxy')
-
-app.use(
-    '/proxy/:port/',
-    proxy((req)=>{return selectProxyHost(req.params.port)}, {
-        proxyReqPathResolver: function(request) {
-            return request.url
-        }
-    })
-)
-
-function selectProxyHost(port){
-    return `http://${defaultAddress}:${port}/`;
 }
 
 if(enableRedirectionLinks) {
@@ -290,7 +261,7 @@ if(enableRedirectionLinks) {
 	app.get('/', (req, res) => {
 		cirrusServer = getAvailableCirrusServer();
 		if (cirrusServer != undefined) {
-            redirectUrl = `http://${config.Address}:${config.HttpPort}/proxy/${cirrusServer.port}/`
+            redirectUrl = `https://${config.Address}:${config.HttpPort}/signal/${cirrusServer.port}/`
 			res.redirect(redirectUrl);
 			console.log(`Redirect to ${redirectUrl}`);
 		} else {
@@ -322,25 +293,23 @@ function disconnect(connection) {
 	connection.end();
 }
 
-
 function controller() {
-    console.log("controller start.......................")
-
+    const readyCount = getReadyCirrusServerCount()
     const availableCount = getAvailableCirrusServerCount()
 
-    console.log("serverCount", cirrusServers.size)
-    console.log("availableCount",availableCount)
+    console.log("serverCount:", cirrusServers.size)
+    console.log("readyCount:", readyCount)
+    console.log("availableCount:",availableCount)
 
-    addServer(getAddNum(availableCount))
-    reduceServer(getReduceNum(availableCount))
+    addServer(getAddNum(availableCount, readyCount))
+    reduceServer(getReduceNum(availableCount, readyCount))
 }
 
-function getAddNum(availableCount) {
+function getAddNum(availableCount, readyCount) {
     const serverCount = cirrusServers.size
     if (serverCount>30) return 0
 
     const childProcessCount = childProcessMap.size
-    const readyCount = getReadyCirrusServerCount()
 
     if (childProcessCount-readyCount >= config.MinAvailableServer) return 0  // 启动中streamer数量 >= 备用数量时 不在启动新的streamer
 
@@ -349,11 +318,10 @@ function getAddNum(availableCount) {
     return config.MinAvailableServer - availableCount
 }
 
-function getReduceNum(availableCount) {
+function getReduceNum(availableCount, readyCount) {
     const serverCount = cirrusServers.size
     if (serverCount < config.MinAvailableServer) return 0
 
-    const readyCount = getReadyCirrusServerCount()
     if (readyCount <= config.MinAvailableServer) return 0
 
     if (availableCount <= config.MinAvailableServer) return 0
@@ -369,14 +337,19 @@ function reduceServer(num) {
 
     let reduceNum = 0
     for (cirrusServer of cirrusServers.values()) {
+        console.log("cirrusServer",cirrusServer)
         if (reduceNum >= num) return
-		if (cirrusServer.numConnectedClients !== 0 || !cirrusServer.ready) continue
+		if (cirrusServer.numConnectedClients > 0 || !cirrusServer.ready) continue
 
         console.log("reduce cirrusServer",cirrusServer)
         const cirrusProcess = childProcessMap.get(cirrusServer.port)
         if (cirrusProcess) {
             cirrusServer.ready = false
-            cirrusProcess.kill()
+            kill(cirrusProcess.pid, 'SIGKILL', function(err) {
+                if (err) {
+                    console.error('do kill failed:', err)
+                }
+            });
             reduceNum++
         }
 	}
@@ -389,26 +362,42 @@ function addServer(num) {
     let addNum = 0
     for (cirrusServer of cirrusServers.values()) {
 		if (addNum === num) return
-		if (cirrusServer.ready === true) continue
-        if (childProcessMap.has(cirrusServer.port)) continue
+		if (cirrusServer.ready === true) continue  // 已经有streamer
+        if (startStreamerTimerMap.has(cirrusServer.port)) continue // 还在等待执行的
+        if (childProcessMap.has(cirrusServer.port)) continue  // 是否在启动中
 
-        console.log("add cirrusServer",cirrusServer)
-        runStreamer(cirrusServer.port, parseInt(cirrusServer.port)+1)
+        const udpPort = udpPorts.get(cirrusServer.port);
+        startStreamerTimer = setInterval(()=>{
+            runStreamer(cirrusServer.port, parseInt(cirrusServer.port)+1, udpPort)
+        }, 2000);
+        startStreamerTimerMap.set(cirrusServer.port, startStreamerTimer)
         addNum++
 	}
 
 	if (addNum === num) return
 
-    // 单机不能无限制的启动，最多 99/3 = 33 个服务器
-    if ( config.StartPort > config.EndPort) return
-
     for (let i=addNum; i<num; i++) {
+        // 单机不能无限制的启动，最多 99/3 = 33 个服务器
+        if ( config.StartPort > config.EndPort) return
+
         const currentHttpPort =  config.StartPort++
         const currentStreamerPort =  config.StartPort++
         const currentSFUPort =  config.StartPort++
 
+        const udpPort = {
+            'send': config.UeUdpSenderPortStart++,
+            'receiver': config.UeUdpRecievePortStart++
+        }
+        udpPorts.set(currentHttpPort, udpPort);
+
+        // updateRedis(currentHttpPort, udpPort);
+
         runCirrus(currentHttpPort, currentStreamerPort, currentSFUPort)
-        runStreamer(currentHttpPort, currentStreamerPort)
+
+        startStreamerTimer = setInterval(()=>{
+            runStreamer(currentHttpPort, currentStreamerPort, udpPort)
+        }, 2000);
+        startStreamerTimerMap.set(currentHttpPort, startStreamerTimer)
     }
 }
 
@@ -433,7 +422,10 @@ function runCirrus(httpPort, streamerPort, SFUPort) {
     execCommand(cmdArr.join(" "))
 }
 
-function runStreamer(httpPort,streamPort) {
+function runStreamer(httpPort, streamPort, udpPort) {
+    if (childProcessMap.size > getReadyCirrusServerCount()) return
+    changeUeConfigIni(udpPort)  // 每次启动时，先修改udp port
+
     cmdArr = [
         config.StreamerRunPath,
         "-PixelStreamingURL=ws://"+defaultAddress+":"+streamPort,
@@ -446,26 +438,28 @@ function runStreamer(httpPort,streamPort) {
 
     if (!streamerProcess) return
 
-    streamerProcess.on('exit',(code)=>{
-        if (childProcessMap.delete(httpPort)) {
-            console.log('delete error ok')
-        }
-        console.log('streamer process exit, code ', code,"httpPort ", httpPort)
+    streamerProcess.on('close',(code)=>{
+        childProcessMap.delete(httpPort)
+        console.log('streamer process closed, code: ', code," httpPort: ", httpPort)
     })
 
     childProcessMap.set(httpPort, streamerProcess)
+
+    clearInterval(startStreamerTimerMap.get(httpPort))  // 清除定时任务
 }
 
 function execCommand(cmd) {
-    return exec(cmd, {} , function(err, stdout, stderr){
-        if (err) {
-            console.error(err);
-        } else if (stderr.length > 0) {
-            console.error(stderr.toString());
-        } else {
-            console.log("stdout:",stdout);
-        }
-    })
+    return exec(cmd, {} , (err, stdout, stderr) => {})
+}
+
+function changeUeConfigIni(udpPort) {
+    const file = config.UeConfigIniPath
+    const data = `udpSendPort=${udpPort.send}
+udpRecievePort=${udpPort.receiver}`
+
+    const fd = fs.openSync (file, 'w+')
+    fs.writeSync(fd, data, 0, 'utf-8')
+    fs.closeSync(fd)
 }
 
 const matchmaker = net.createServer((connection) => {
@@ -504,7 +498,7 @@ const matchmaker = net.createServer((connection) => {
 				console.log(`Adding connection for ${cirrusServer.address.split(".")[0]} with playerConnected: ${message.playerConnected}`)
 				cirrusServers.set(connection, cirrusServer);
             } else {
-				console.log(`RECONNECT: cirrus server address ${cirrusServer.address.split(".")[0]} already found--replacing. playerConnected: ${message.playerConnected}`)
+				console.log(`RECONNECT: cirrus server address ${cirrusServer.address} already found--replacing. playerConnected: ${message.playerConnected}`)
 				var foundServer = cirrusServers.get(server[0]);
 
 				// Make sure to retain the numConnectedClients from the last one before the reconnect to MM
@@ -548,7 +542,7 @@ const matchmaker = net.createServer((connection) => {
 			// A client disconnects from a Cirrus server.
 			cirrusServer = cirrusServers.get(connection);
 			if(cirrusServer) {
-				cirrusServer.numConnectedClients--;
+                cirrusServer.numConnectedClients = cirrusServer.numConnectedClients === 0 ? 0 : --cirrusServer.numConnectedClients;
 				console.log(`Client disconnected from Cirrus server ${cirrusServer.address}:${cirrusServer.port}`);
 				if(cirrusServer.numConnectedClients === 0) {
 					// this make this server immediately available for a new client
@@ -582,11 +576,16 @@ const matchmaker = net.createServer((connection) => {
 	});
 });
 
+function init() {
+    addServer(config.MinAvailableServer)
+}
+
+init()
+
 matchmaker.listen(config.MatchmakerPort, () => {
-    // controller()
     setInterval(function(){
         controller()
-    }, config.ControllerInterval)
+    }, config.ControllerInterval * 1000)
 
 	console.log('Matchmaker listening on *:' + config.MatchmakerPort);
 });

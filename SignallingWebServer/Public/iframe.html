@@ -1,0 +1,15 @@
+<html>
+<script>
+    function doClick() {
+        // window.parent.location.reload()
+        // console.log(window.parent)
+        window.parent.postMessage({reload:true}, '*')
+        // top.postMessage({reload:true}, '*')
+    }
+</script>
+<body>
+    <div style="display: block;width: 100%;height: 200px;">
+        <button style="width: 120px; height: 20px;background-color: coral;" onclick="doClick()" >6001 click</button>
+    </div>
+</body>
+</html>
