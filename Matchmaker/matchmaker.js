@@ -598,12 +598,11 @@ function reduceServer() {
     if (startStreamerMap.size > 0) return 0; // 有启动中streamer，不应该在去缩减
 
     for (cirrusServer of cirrusServers.values()) {
-        if (reduceNum >= num) return
 		if (cirrusServer.numConnectedClients > 0 || !cirrusServer.ready) continue
 
-        console.log("reduce cirrusServer",cirrusServer)
+        console.log("reduce cirrusServer",  cirrusServer)
         cirrusServer.ready = false
-        killStreamer()
+        killStreamer(childProcessMap.get(cirrusServer.port))
 
         return
 	}
