@@ -32,7 +32,7 @@ const defaultConfig = {
 
 var childProcessMap = new Map()
 var udpPorts = new Map();
-var startStreamerTimerMap = new Map();
+var startStreamerMap = new Map();
 
 // Similar to the Signaling Server (SS) code, load in a config.json file for the MM parameters
 const argv = require('yargs').argv;
@@ -52,6 +52,12 @@ const logging = require('./modules/logging.js');
 const { exec } = require('child_process');
 const defaultAddress = '127.0.0.1'
 const kill = require('tree-kill');
+
+var lastTime = Date.now();
+const reduceInterval = 120; // 用户操作后，多少秒后删除streamer
+const stopStreamerInterval = 600; // 每间隔指定时间，检查是否要停止ue服务。
+const startStreamerInterval = 10; // 每隔指定时间，从队列读取信息，启动ue
+
 // const redis = require('./db/redis')
 // const redisDevOptions = require('./config/redis.dev')
 // const redisTestOptions = require('./config/redis.test')
@@ -138,6 +144,8 @@ if (!config.StreamerRunPath || !config.CirrusRunPath || !config.Address || !conf
     console.error("缺少必要的启动参数");
     throw new Error("缺少必要的启动参数")
 }
+
+const maxStreamerNumber = (config.EndPort-config.StartPort) / 3 + 1;
 
 http.listen(config.HttpPort, () => {
     console.log('HTTP listening on *:' + config.HttpPort);
@@ -245,14 +253,16 @@ if(enableRESTAPI) {
 	// Handle REST signalling server only request.
 	app.options('/signallingserver', cors())
 	app.get('/signallingserver', cors(),  (req, res) => {
+        lastTime = Date.now();
 		cirrusServer = getAvailableCirrusServer();
 		if (cirrusServer != undefined) {
 			res.json({ signallingServer: `${cirrusServer.address}:${cirrusServer.port}`});
 			console.log(`Returning ${cirrusServer.address}:${cirrusServer.port}`);
 		} else {
 			res.json({ signallingServer: '', error: 'No signalling servers available'});
-            addServer(getAddNum(getAvailableCirrusServerCount()));
 		}
+
+        addServer(getAddNum(getAvailableCirrusServerCount()));
 	});
 }
 
@@ -297,62 +307,22 @@ function controller() {
     const readyCount = getReadyCirrusServerCount()
     const availableCount = getAvailableCirrusServerCount()
 
-    console.log("serverCount:", cirrusServers.size)
-    console.log("readyCount:", readyCount)
-    console.log("availableCount:",availableCount)
+    console.log("server count:", cirrusServers.size)
+    console.log("ready count:", readyCount)
+    console.log("streamer count:", childProcessMap.size)
+    console.log("available count:", availableCount)
+    console.log("starting count:", startStreamerMap.size)
 
-    addServer(getAddNum(availableCount, readyCount))
-    reduceServer(getReduceNum(availableCount, readyCount))
+    addServer(getAddNum(availableCount))
 }
 
-function getAddNum(availableCount, readyCount) {
-    const serverCount = cirrusServers.size
-    if (serverCount>30) return 0
+function getAddNum(availableCount) {
 
-    const childProcessCount = childProcessMap.size
+    if (childProcessMap.size >= maxStreamerNumber) return 0; // 启动的ue达到上线，不在启动
 
-    if (childProcessCount-readyCount >= config.MinAvailableServer) return 0  // 启动中streamer数量 >= 备用数量时 不在启动新的streamer
+    if (availableCount + startStreamerMap.size >= config.MinAvailableServer) return 0; // 空闲+启动中的streamer 大于设置的备用数量时，不在启动
 
-    if (availableCount >= config.MinAvailableServer) return 0
-
-    return config.MinAvailableServer - availableCount
-}
-
-function getReduceNum(availableCount, readyCount) {
-    const serverCount = cirrusServers.size
-    if (serverCount < config.MinAvailableServer) return 0
-
-    if (readyCount <= config.MinAvailableServer) return 0
-
-    if (availableCount <= config.MinAvailableServer) return 0
-
-    return availableCount - config.MinAvailableServer
-}
-
-// 只关streamer不关闭signalling
-// TODO: 不应该频繁的kill 进程
-function reduceServer(num) {
-    console.log("reduce number ",num)
-    if (num == 0) return
-
-    let reduceNum = 0
-    for (cirrusServer of cirrusServers.values()) {
-        console.log("cirrusServer",cirrusServer)
-        if (reduceNum >= num) return
-		if (cirrusServer.numConnectedClients > 0 || !cirrusServer.ready) continue
-
-        console.log("reduce cirrusServer",cirrusServer)
-        const cirrusProcess = childProcessMap.get(cirrusServer.port)
-        if (cirrusProcess) {
-            cirrusServer.ready = false
-            kill(cirrusProcess.pid, 'SIGKILL', function(err) {
-                if (err) {
-                    console.error('do kill failed:', err)
-                }
-            });
-            reduceNum++
-        }
-	}
+    return config.MinAvailableServer - availableCount - startStreamerMap.size;
 }
 
 function addServer(num) {
@@ -363,67 +333,28 @@ function addServer(num) {
     for (cirrusServer of cirrusServers.values()) {
 		if (addNum === num) return
 		if (cirrusServer.ready === true) continue  // 已经有streamer
-        if (startStreamerTimerMap.has(cirrusServer.port)) continue // 还在等待执行的
-        if (childProcessMap.has(cirrusServer.port)) continue  // 是否在启动中
-
+        if (startStreamerMap.get(cirrusServer.port)) continue // 还在等待执行的
+        if (childProcessMap.get(cirrusServer.port)) continue  // 是否在启动中
         const udpPort = udpPorts.get(cirrusServer.port);
-        startStreamerTimer = setInterval(()=>{
-            runStreamer(cirrusServer.port, parseInt(cirrusServer.port)+1, udpPort)
-        }, 2000);
-        startStreamerTimerMap.set(cirrusServer.port, startStreamerTimer)
+
+        const params = {
+            'httpPort':cirrusServer.port,
+            'streamPort':parseInt(cirrusServer.port)+1,
+            'udpPort': udpPort,
+            'startTime': Date.now()
+        }
+
+        startStreamerMap.set(cirrusServer.port, params)
         addNum++
 	}
-
-	if (addNum === num) return
-
-    for (let i=addNum; i<num; i++) {
-        // 单机不能无限制的启动，最多 99/3 = 33 个服务器
-        if ( config.StartPort > config.EndPort) return
-
-        const currentHttpPort =  config.StartPort++
-        const currentStreamerPort =  config.StartPort++
-        const currentSFUPort =  config.StartPort++
-
-        const udpPort = {
-            'send': config.UeUdpSenderPortStart++,
-            'receiver': config.UeUdpRecievePortStart++
-        }
-        udpPorts.set(currentHttpPort, udpPort);
-
-        // updateRedis(currentHttpPort, udpPort);
-
-        runCirrus(currentHttpPort, currentStreamerPort, currentSFUPort)
-
-        startStreamerTimer = setInterval(()=>{
-            runStreamer(currentHttpPort, currentStreamerPort, udpPort)
-        }, 2000);
-        startStreamerTimerMap.set(currentHttpPort, startStreamerTimer)
-    }
-}
-
-function runCirrus(httpPort, streamerPort, SFUPort) {
-    let cmdArr = [
-        config.CirrusRunPath,
-        "--UseMatchmaker --matchmakerAddress",
-        defaultAddress,
-        "--matchmakerPort",
-        config.MatchmakerPort,
-        "--PublicIp",
-        config.Address,
-        "--HttpPort",
-        httpPort,
-        "--StreamerPort",
-        streamerPort,
-        "--SFUPort",
-        SFUPort,
-    ]
-
-    console.log('cmd:',cmdArr.join(" "))
-    execCommand(cmdArr.join(" "))
 }
 
 function runStreamer(httpPort, streamPort, udpPort) {
     if (childProcessMap.size > getReadyCirrusServerCount()) return
+    if (childProcessMap.get(httpPort)) return
+
+    childProcessMap.set(httpPort, null)
+
     changeUeConfigIni(udpPort)  // 每次启动时，先修改udp port
 
     cmdArr = [
@@ -433,22 +364,21 @@ function runStreamer(httpPort, streamPort, udpPort) {
         "-ResX="+config.ResX+" -ResY="+config.ResY+" -log",
     ]
 
-    console.log('cmd:',cmdArr.join(" "))
     streamerProcess = execCommand(cmdArr.join(" "))
 
-    if (!streamerProcess) return
+    if (streamerProcess) {
+        streamerProcess.on('close',(code)=>{
+            childProcessMap.delete(httpPort)
+            console.log('streamer process closed, code: ', code," httpPort: ", httpPort)
+        })
+    }
 
-    streamerProcess.on('close',(code)=>{
-        childProcessMap.delete(httpPort)
-        console.log('streamer process closed, code: ', code," httpPort: ", httpPort)
-    })
-
+    killStreamer(childProcessMap.get(httpPort)) // 新启动之前，kill之前的进程
     childProcessMap.set(httpPort, streamerProcess)
-
-    clearInterval(startStreamerTimerMap.get(httpPort))  // 清除定时任务
 }
 
 function execCommand(cmd) {
+    console.log('cmd:', cmd)
     return exec(cmd, {} , (err, stdout, stderr) => {})
 }
 
@@ -539,6 +469,7 @@ const matchmaker = net.createServer((connection) => {
 				disconnect(connection);
 			}
 		} else if (message.type === 'clientDisconnected') {
+            lastTime = Date.now();
 			// A client disconnects from a Cirrus server.
 			cirrusServer = cirrusServers.get(connection);
 			if(cirrusServer) {
@@ -576,16 +507,131 @@ const matchmaker = net.createServer((connection) => {
 	});
 });
 
+
+function initSignaler() {
+    for (let i = 0; i < maxStreamerNumber; i++) {
+        // 单机不能无限制的启动，最多 99/3 = 33 个服务器
+        if ( config.StartPort > config.EndPort) return
+
+        const currentHttpPort =  config.StartPort++
+        const currentStreamerPort =  config.StartPort++
+        const currentSFUPort =  config.StartPort++
+
+        const udpPort = {
+            'send': config.UeUdpSenderPortStart++,
+            'receiver': config.UeUdpRecievePortStart++
+        }
+        udpPorts.set(currentHttpPort, udpPort);
+
+        setTimeout(() => {
+            runCirrus(currentHttpPort, currentStreamerPort, currentSFUPort)
+        }, (i + 1) * 5 * 1000);
+    }
+}
+
+function runCirrus(httpPort, streamerPort, SFUPort) {
+    let cmdArr = [
+        config.CirrusRunPath,
+        "--UseMatchmaker --matchmakerAddress",
+        defaultAddress,
+        "--matchmakerPort",
+        config.MatchmakerPort,
+        "--PublicIp",
+        config.Address,
+        "--HttpPort",
+        httpPort,
+        "--StreamerPort",
+        streamerPort,
+        "--SFUPort",
+        SFUPort,
+    ]
+
+    execCommand(cmdArr.join(" "))
+}
+
 function init() {
+    initSignaler()
     addServer(config.MinAvailableServer)
 }
 
 init()
 
+function startStreamer() {
+    const params = getStartParams()
+
+    if (!params) return
+
+    runStreamer(params.httpPort,params.streamPort,params.udpPort);
+}
+
+function getStartParams() {
+    for (params of startStreamerMap.values()) {
+        startStreamerMap.delete(params.httpPort);
+        if (childProcessMap.get(params.httpPort)) {
+            continue
+        }
+
+        return params
+    }
+
+    return null
+}
+
+function getReduceNum() {
+    const availableCount = getAvailableCirrusServerCount()
+
+    if (startStreamerMap.size > 0) return 0; // 有启动中streamer，不应该在去缩减
+
+    if ( ( Date.now() - lastTime) / 1000 < reduceInterval ) return 0; // 如果有用户打开模型，则2分钟内不删除
+
+    if (availableCount <= config.MinAvailableServer) return 0;
+
+    return availableCount - config.MinAvailableServer;
+}
+
+// 只关streamer不关闭signalling
+function reduceServer() {
+    num = getReduceNum()
+    console.log("reduce number ",num)
+    if (num == 0) return
+
+    if (startStreamerMap.size > 0) return 0; // 有启动中streamer，不应该在去缩减
+
+    for (cirrusServer of cirrusServers.values()) {
+        if (reduceNum >= num) return
+		if (cirrusServer.numConnectedClients > 0 || !cirrusServer.ready) continue
+
+        console.log("reduce cirrusServer",cirrusServer)
+        cirrusServer.ready = false
+        killStreamer()
+
+        return
+	}
+}
+
+function killStreamer(cirrusProcess) {
+    if (!cirrusProcess) return
+
+    kill(cirrusProcess.pid, 'SIGKILL', function(err) {
+        if (err) {
+            console.error('do kill failed:', err)
+        }
+    });
+
+}
+
 matchmaker.listen(config.MatchmakerPort, () => {
     setInterval(function(){
         controller()
-    }, config.ControllerInterval * 1000)
+    }, config.ControllerInterval * 1000);
+
+    setInterval(()=>{
+        startStreamer()
+    }, startStreamerInterval * 1000);
+
+    setInterval(()=>{
+        reduceServer()
+    }, stopStreamerInterval * 1000);
 
 	console.log('Matchmaker listening on *:' + config.MatchmakerPort);
 });
